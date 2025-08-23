@@ -1,18 +1,21 @@
 # Car Analyzer
 
-A small Java console app that estimates **market value** and computes a recommended **max bid** for auction cars based on:
-- year & mileage
-- title condition (Clean/Salvage/Rebuilt)
-- damage type (None/Accident/Engine/Flood/etc.)
-- baseline value and target profit
-- auction & towing fees
+Batch-analyzes auction cars from a **CSV** and recommends a **max bid** using simple risk/valuation rules.
 
----
-
-## Input: CSV Format
-`cars.csv` (comma-separated, one car per line)
+## Features
+- CSV-driven (no hardcoding) — header auto-detected, comments/blank lines ignored
+- Computes **Market Value**, **Repair Cost**, **Title Factor**, **Max Bid**
+- Clean, aligned console output (USD currency)
 
 ## Run
-./run.sh                # runs with cars.csv
-./run.sh mycars.csv     # runs with a custom file
+```bash
+# Option A — compile & run directly
+javac *.java
+java Main                 # uses cars.csv by default
+java Main path/to/my.csv  # analyze a different file
+
+# Option B — script (macOS/Linux)
+chmod +x run.sh
+./run.sh                  # uses cars.csv
+./run.sh path/to/my.csv
 
