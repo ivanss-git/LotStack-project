@@ -1,22 +1,18 @@
-# About me 
-
-Hello all! I have some previous experience in C++ and recently got into learning java just over a month ago. I also got into the car business this year and thought it
-would be a great way for me to apply what i've learned.
-
 # Car Analyzer
 
-I intend to continue using this to help me purchase used cars on various auction sites hoping to flip them for a profit.
-It calculates the market value, repair cost, and provides me with a suggestion on the max amount i should pay for the car if im looking to make x dollars in profit. 
+A small Java console app that estimates **market value** and computes a recommended **max bid** for auction cars based on:
+- year & mileage
+- title condition (Clean/Salvage/Rebuilt)
+- damage type (None/Accident/Engine/Flood/etc.)
+- baseline value and target profit
+- auction & towing fees
 
-# Future plans 
+---
 
-Add more evaluation metrics, Analyze real time data through web scraping for more accurate results and Create a website to list my inventory of cars
+## Input: CSV Format
+`cars.csv` (comma-separated, one car per line)
 
-# Feedback
+## Run
+./run.sh                # runs with cars.csv
+./run.sh mycars.csv     # runs with a custom file
 
-I'm open to any and all feedback! 
-
-# How to run
-
-bash
-./run.sh

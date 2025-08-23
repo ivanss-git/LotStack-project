@@ -1,0 +1,5 @@
+# make,year,mileage,titleCode,damageType,baseValue,profitGoal,auctionFees,towFee
+Honda,2018,42000,Clean,None,18500,2000,350,120
+Toyota,2015,75000,Rebuilt,Accident,15500,2500,375,150
+Ford,2012,120000,Salvage,Engine,9000,2500,400,180
+

@@ -1,0 +1,27 @@
+
+---
+
+## .gitignore
+```gitignore
+# OS
+.DS_Store
+
+# Build outputs
+*.class
+/out/
+/target/
+/build/
+
+# IDE / Editors
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Logs / temps
+*.log
+*.tmp
+tmp/
+

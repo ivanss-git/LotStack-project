@@ -1,13 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Compiles all
+CSV_PATH="${1:-cars.csv}"
 
-javac *.java
-
-#if a success
-
+# Compile all Java files
 if javac *.java; then
-  java Main
+  echo "Compilation successful. Running program..."
+  java Main "$CSV_PATH"
 else
   echo "Compilation failed."
+  exit 1
 fi
+
