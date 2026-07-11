@@ -1,21 +1,57 @@
-# Car Analyzer
+# Car Auction Analyzer
 
-Batch-analyzes auction cars from a **CSV** and recommends a **max bid** using simple risk/valuation rules.
+A Java application that analyzes auction vehicles from a CSV file and recommends whether a vehicle appears to be a good purchase based on simple valuation and risk calculations.
 
 ## Features
-- CSV-driven (no hardcoding) — header auto-detected, comments/blank lines ignored
-- Computes **Market Value**, **Repair Cost**, **Title Factor**, **Max Bid**
-- Clean, aligned console output (USD currency)
 
-## Run
+* Reads vehicle data from a CSV file
+* Automatically detects the CSV header
+* Ignores blank lines and comments
+* Calculates:
+
+  * Estimated Market Value
+  * Estimated Repair Cost
+  * Title Risk Factor
+  * Recommended Maximum Bid
+* Returns whether the vehicle is a good or bad purchase based on the calculated values
+* Displays clean, formatted console output
+
+## Project Structure
+
+```text
+backend/
+data/
+database/
+docs/
+frontend/
+ml/
+scraping/
+```
+
+## Running the Application
+
+From the `backend` directory:
+
 ```bash
-# Option A — compile & run directly
-javac *.java
-java Main                 # uses cars.csv by default
-java Main path/to/my.csv  # analyze a different file
+javac -d target/classes src/main/java/com/carauction/*.java
 
-# Option B — script (macOS/Linux)
-chmod +x run.sh
-./run.sh                  # uses cars.csv
-./run.sh path/to/my.csv
+java -cp target/classes com.carauction.Main ../data/samples/cars.csv
+```
+
+To analyze a different CSV file:
+
+```bash
+java -cp target/classes com.carauction.Main path/to/your/file.csv
+```
+
+## Future Goals
+
+This project will continue to grow into a full-stack application with:
+
+* Real auction data collection
+* Database integration
+* REST APIs
+* Web interface
+* Data visualization
+* Machine learning predictions
 
