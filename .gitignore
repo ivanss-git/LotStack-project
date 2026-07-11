@@ -7,6 +7,12 @@
 /target/
 /build/
 
+# Java
+*.class
+out/
+target/
+build/
+
 # IDE / Editors
 .idea/
 *.iml
