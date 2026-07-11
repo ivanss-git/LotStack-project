@@ -1,3 +1,4 @@
+package backend.src.main.java.com.carauction;
 
 public class Car {
     public int year;
