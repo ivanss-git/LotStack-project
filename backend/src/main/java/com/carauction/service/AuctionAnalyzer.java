@@ -4,6 +4,22 @@ package com.carauction.service;
 import com.carauction.model.AnalysisResult;
 import com.carauction.model.Vehicle;
 
+// Should eventually look like : 
+// public AnalysisResult analyze(Vehicle vehicle) {
+//     double marketValue = marketService.calculateMarketValue(vehicle);
+//     double repairCost = historyService.calculateRepairCost(vehicle);
+//     double titleFactor = paperworkService.titleFactor(vehicle);
+//     double transportCost = transportService.calculateTransportCost(vehicle);
+
+//     double maxBid = marketValue
+//                   - repairCost
+//                   - transportCost
+//                   - vehicle.auctionFees
+//                   - vehicle.profitGoal;
+
+//     return new AnalysisResult(...);
+// }
+
 public class AuctionAnalyzer {  
 
     private final PaperworkService paperworkService;
@@ -23,42 +39,31 @@ public class AuctionAnalyzer {
         this.marketService = marketService;
     }
 
+    public PaperworkService getPaperWorkService() { return paperworkService;}
+    public HistoryService getHsitoryService() { return historyService;}
+    public TransportService getTransportService() { return transportService;}
+    public MarketComparisonService getMarketComparisonService() { return marketService;}
+
     public AnalysisResult analyze(Vehicle vehicle) {
         throw new UnsupportedOperationException("Logic not implemented yet.");
     }
 
 
     public double marketValue(Vehicle car) {
-        double value = car.baseValue;
-        int age = 2025 - car.year;
-        value *= titleFactor(car);
-        return Math.max(1000,value);
-
+        throw new UnsupportedOperationException("Logic not implemented yet.");
     }
     public double repairCost(Vehicle car) {
-        double repairCost = 0.0;
-        
-        switch(car.damageType.toLowerCase()) {
-            case "none": 
-                repairCost = 0.0;
-                break;
-        }
-        return repairCost;
+        throw new UnsupportedOperationException("Logic not implemented yet.");
     }
     public double titleFactor(Vehicle car) {
-        switch(car.vinStatus.toLowerCase()) {
-            case "salvage":
-                return 0.80;
-            case "rebuilt":
-                return 0.90;
-            default:
-                return 1.0;
+        throw new UnsupportedOperationException("Logic not implemented yet.");
         }
-    }
+
     public double maxBid(Vehicle car) {
-        double value = marketValue(car);
-        double cost = repairCost(car) + car.auctionFees + car.towFee;
-        return Math.max(0, value - car.profitGoal - cost);
+        // double cost = repairCost(car) + car.auctionFees + car.towFee;
+        // return Math.max(0, value - car.profitGoal - cost);
+        throw new UnsupportedOperationException("Logic not implemented yet.");
+
     }
 }
 

@@ -2,31 +2,45 @@ package com.carauction.model;
 // Just the data model, no business logic
 
 public class Vehicle {
-    public int year;
-    public int mileage;
-    public double auctionFees;
-    public double towFee;
-    public double baseValue;
-    public double profitGoal;
-    public String vinStatus;
-    public String make;
-    public String damageType;
+    private int vin;
+    private int year;
+    private String make;
+    private String model;
+    private String color;
+    private double mileage;
+    private String bodyCondition;
+    private String mechanicalStatus;
+    private String titleStatus;
 
-    public Vehicle(int year,int mileage,double auctionFees,double towFee,double baseValue,double profitGoal, String vinStatus, String make, String damageType) {
+    public Vehicle(
+        int vin, 
+        int year,
+        String make, 
+        String model, 
+        String color, 
+        double mileage, 
+        String bodyCondition, 
+        String mechanicalStatus, 
+        String titleStatus
+    ) {
+        this.vin = vin;
+        this.make = make; 
+        this.model = model;
         this.year = year;
+        this.color = color;
         this.mileage = mileage;
-        this.auctionFees = auctionFees;
-        this.towFee = towFee;
-        this.baseValue = baseValue;
-        this.profitGoal = profitGoal;
-        this.vinStatus = vinStatus;
-        this.make = make;
-        this.damageType = damageType;
+        this.bodyCondition = bodyCondition;
+        this.mechanicalStatus = mechanicalStatus;
+        this.titleStatus = titleStatus;
     } 
-    @Override
-    public String toString() {
-        return "\nMake: " +make+ ", Year: " +year+ ", Mileage: " +mileage+ ", Title: " +vinStatus+ ", Damage Type: " +damageType;
 
-    }
-
+    public int getVin() { return vin;}
+    public int getYear() { return year;}
+    public String getMake() { return make;}
+    public String getModel() { return model;}
+    public String getColor() { return color;}
+    public double getMileage() { return mileage;}
+    public String getBodyCondition() { return bodyCondition;}
+    public String mechanicalStatus() { return mechanicalStatus;}
+    public String getTitleStatus() { return titleStatus;}
 }
