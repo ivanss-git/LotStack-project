@@ -1,4 +1,4 @@
-package backend.src.main.java.com.carauction;
+package com.carauction;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,7 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import com.carauction.model.Vehicle;
+import com.carauction.service.AuctionAnalyzer;
+
 import java.text.NumberFormat;
+
+// Should read, analyze each, and print results
 
 public class Main {
 	private static final String DEFAULT_CSV = "cars.csv";
@@ -14,7 +20,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		String csvPath = args.length > 0 ? args[0] : DEFAULT_CSV;
-		List<Car> cars = new ArrayList<>();
+		List<Vehicle> cars = new ArrayList<>();
 
 		try(BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
 			String line;
@@ -43,7 +49,7 @@ public class Main {
 				double auctionFees = Double.parseDouble(d[7].trim());
 				double towFee = Double.parseDouble(d[8].trim());
 
-				cars.add(new Car(year, mileage, auctionFees, towFee, baseValue, profitGoal, titleCode, make, damageType));
+				cars.add(new Vehicle(year, mileage, auctionFees, towFee, baseValue, profitGoal, titleCode, make, damageType));
 			}
 		} catch (IOException e) {
 			System.err.println("Failed to read CSV: " + csvPath);
@@ -51,8 +57,8 @@ public class Main {
 			return;
 		}
 		
-		Interface analyzer = new Implementation();
-		for (Car car : cars) {
+		AuctionAnalyzer analyzer = new AuctionAnalyzer(null, null, null, null);
+		for (Vehicle car : cars) {
 			double mv = analyzer.marketValue(car);
 			double rc = analyzer.repairCost(car);
 			double tf = analyzer.titleFactor(car);
