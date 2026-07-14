@@ -8,22 +8,6 @@ import com.carauction.model.VehiclePaperwork;
 
 import java.util.List;
 
-// Should eventually look like : 
-// public AnalysisResult analyze(Vehicle vehicle) {
-//     double marketValue = marketService.calculateMarketValue(vehicle);
-//     double repairCost = historyService.calculateRepairCost(vehicle);
-//     double titleFactor = paperworkService.titleFactor(vehicle);
-//     double transportCost = transportService.calculateTransportCost(vehicle);
-
-//     double maxBid = marketValue
-//                   - repairCost
-//                   - transportCost
-//                   - vehicle.auctionFees
-//                   - vehicle.profitGoal;
-
-//     return new AnalysisResult(...);
-// }
-
 public class AuctionAnalyzer {  
 
     private final PaperworkService paperworkService;
@@ -67,7 +51,6 @@ public class AuctionAnalyzer {
             goodPurchase
     );
     
-
     }
 
     public double titleFactor(Vehicle car) {
@@ -78,8 +61,6 @@ public class AuctionAnalyzer {
         // double cost = repairCost(car) + car.auctionFees + car.towFee;
         // return Math.max(0, value - car.profitGoal - cost);
         throw new UnsupportedOperationException("Logic not implemented yet.");
-
     }
-
 }
 
