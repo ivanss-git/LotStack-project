@@ -2,7 +2,7 @@ package com.carauction.model;
 // Just the data model, no business logic
 
 public class Vehicle {
-    private int vin;
+    private String vin;
     private int year;
     private String make;
     private String model;
@@ -13,7 +13,7 @@ public class Vehicle {
     private String titleStatus;
 
     public Vehicle(
-        int vin, 
+        String vin, 
         int year,
         String make, 
         String model, 
@@ -34,13 +34,13 @@ public class Vehicle {
         this.titleStatus = titleStatus;
     } 
 
-    public int getVin() { return vin;}
+    public String getVin() { return vin;}
     public int getYear() { return year;}
     public String getMake() { return make;}
     public String getModel() { return model;}
     public String getColor() { return color;}
     public double getMileage() { return mileage;}
     public String getBodyCondition() { return bodyCondition;}
-    public String mechanicalStatus() { return mechanicalStatus;}
+    public String getMechanicalStatus() { return mechanicalStatus;}
     public String getTitleStatus() { return titleStatus;}
 }

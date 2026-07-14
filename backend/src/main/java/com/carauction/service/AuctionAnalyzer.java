@@ -1,8 +1,12 @@
 package com.carauction.service;
 // should calculate market value, repair costs, max bid, and isGoodpurchase
-
 import com.carauction.model.AnalysisResult;
+import com.carauction.model.TransportEstimate;
 import com.carauction.model.Vehicle;
+import com.carauction.model.VehicleHistory;
+import com.carauction.model.VehiclePaperwork;
+
+import java.util.List;
 
 // Should eventually look like : 
 // public AnalysisResult analyze(Vehicle vehicle) {
@@ -39,25 +43,36 @@ public class AuctionAnalyzer {
         this.marketService = marketService;
     }
 
-    public PaperworkService getPaperWorkService() { return paperworkService;}
-    public HistoryService getHsitoryService() { return historyService;}
-    public TransportService getTransportService() { return transportService;}
-    public MarketComparisonService getMarketComparisonService() { return marketService;}
-
     public AnalysisResult analyze(Vehicle vehicle) {
-        throw new UnsupportedOperationException("Logic not implemented yet.");
+        VehicleHistory history = historyService.fetchHistory(vehicle);
+        VehiclePaperwork paperwork = paperworkService.fetchPaperwork(vehicle);
+        TransportEstimate transportEstimate = transportService.estimateTransport(vehicle);
+        List<Vehicle> comparableVehicles = marketService.findComparableVehicles(vehicle);
+        
+        double marketValue = marketService.calculateMarketValue(vehicle, comparableVehicles);
+        double repairCost = historyService.calculateRepairCost(history);
+        double titleFactor = paperworkService.calculateTitleFactor(paperwork);
+        double transportCost = transportService.calculateTransportCost(transportEstimate);
+
+        double maxBid = 0.0; // TODO
+        boolean goodPurchase = false; // TODO
+
+        return new AnalysisResult(
+            vehicle.getVin(),
+            marketValue,
+            repairCost,
+            transportCost,
+            titleFactor,
+            maxBid,
+            goodPurchase
+    );
+    
+
     }
 
-
-    public double marketValue(Vehicle car) {
-        throw new UnsupportedOperationException("Logic not implemented yet.");
-    }
-    public double repairCost(Vehicle car) {
-        throw new UnsupportedOperationException("Logic not implemented yet.");
-    }
     public double titleFactor(Vehicle car) {
         throw new UnsupportedOperationException("Logic not implemented yet.");
-        }
+    }
 
     public double maxBid(Vehicle car) {
         // double cost = repairCost(car) + car.auctionFees + car.towFee;
@@ -65,5 +80,6 @@ public class AuctionAnalyzer {
         throw new UnsupportedOperationException("Logic not implemented yet.");
 
     }
+
 }
 

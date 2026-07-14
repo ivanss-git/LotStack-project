@@ -6,11 +6,15 @@ import java.util.List;
 
 public class MarketComparisonService {
 
-    public double calculateAverageComparablePrice (List<Vehicle> compareableVehicles) {
+    public List<Vehicle> findComparableVehicles(Vehicle vehicle) {
         throw new UnsupportedOperationException("Logic not implemented yet.");
     }
 
-    public double estimateMarketValue(Vehicle vehicle, List<Vehicle> compareableVehicles) {
+    public double calculateAverageComparablePrice(List<Vehicle> compareableVehicles) {
+        throw new UnsupportedOperationException("Logic not implemented yet.");
+    }
+
+    public double calculateMarketValue(Vehicle vehicle, List<Vehicle> compareableVehicles) {
         throw new UnsupportedOperationException("Logic not implemented yet.");
     }
 }

@@ -15,7 +15,7 @@ public class VehiclePaperwork {
         this.lienPresent = lienPresent;
     }
 
-    public boolean getIsVinValid() { return vinValid;}
+    public boolean isVinValid() { return vinValid;}
     public String getTitleStatus() { return titleStatus;}
-    public boolean getIsLienPresent() { return lienPresent;}
+    public boolean isLienPresent() { return lienPresent;}
 }

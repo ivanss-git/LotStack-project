@@ -1,0 +1,1 @@
+Main: wires everything together and starts the application
