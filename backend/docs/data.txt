@@ -1,1 +1,0 @@
-Where does the information i have come from? (Csv, API, Database, etc)

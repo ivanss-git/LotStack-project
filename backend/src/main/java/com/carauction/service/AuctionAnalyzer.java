@@ -38,8 +38,8 @@ public class AuctionAnalyzer {
         double titleFactor = paperworkService.calculateTitleFactor(paperwork);
         double transportCost = transportService.calculateTransportCost(transportEstimate);
 
-        double maxBid = 0.0; // TODO
-        boolean goodPurchase = false; // TODO
+        double maxBid = 0.0; 
+        boolean goodPurchase = false; 
 
         return new AnalysisResult(
             vehicle.getVin(),
