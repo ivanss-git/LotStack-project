@@ -15,7 +15,9 @@ url = "https://example.com/api/vehicles"
 response = requests.get(url, timeout=10)
 response.raise_for_status()
 
+# APIs often wrap vehicle under other fields so inspect it
 data = response.json()
+cars = data["results"]
 df = pd.DataFrame(data)
 
 filtered_df = df[df["year"] > 2010]
