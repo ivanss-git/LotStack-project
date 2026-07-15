@@ -1,3 +1,27 @@
+
+"""
+Example 1: Local CSV Processing
+
+Purpose:
+    Learn how to read, inspect, filter, and write CSV files using pandas.
+
+Concepts:
+    - pandas DataFrames
+    - Reading CSV files
+    - Filtering rows
+    - Saving filtered data
+    - Basic data inspection
+
+Data Flow:
+    Local CSV
+        ↓
+    pandas DataFrame
+        ↓
+    Filter rows
+        ↓
+    Save new CSV
+"""
+
 import pandas as pd
 
 csv_path = "src/main/java/com/carauction/data/car_auction_train.csv"

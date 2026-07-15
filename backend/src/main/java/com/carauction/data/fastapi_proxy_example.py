@@ -3,6 +3,34 @@
 # run them as seperate applications that talk over the network
 # backend in java (springBoot) and data shipping in python (fastApi or flask)
 
+"""
+Example 4: FastAPI API Proxy
+
+Purpose:
+    Build a REST API that retrieves data from an external API, processes it,
+    and exposes the results through your own endpoint.
+
+Concepts:
+    - FastAPI
+    - REST APIs
+    - External API integration
+    - JSON processing
+    - Data transformation
+
+Data Flow:
+    Client Request
+        ↓
+    FastAPI
+        ↓
+    External API
+        ↓
+    JSON Response
+        ↓
+    Process Data
+        ↓
+    JSON Response
+"""
+
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
