@@ -1,4 +1,4 @@
-package com.carauction.respository;
+package com.carauction.repository;
 
 public class VehicleRepositoryTest {
     
