@@ -1,4 +1,4 @@
-# Car Auction Analyzer
+# LotStack
 
 A Java application that analyzes auction vehicles from a CSV file and recommends whether a vehicle appears to be a good purchase based on simple valuation and risk calculations.
 
