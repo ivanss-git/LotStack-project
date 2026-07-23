@@ -28,3 +28,7 @@ Car/
 
 # maven
 backend/target/
+
+# kaggle
+kaggle.json
+**/kaggle.json
