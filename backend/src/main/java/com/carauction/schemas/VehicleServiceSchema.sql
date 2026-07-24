@@ -13,5 +13,6 @@ CREATE TABLE vehicle_schema.attributes (
     engine VARCHAR(255),
     transmission VARCHAR(255),
     drivetrain VARCHAR(255)
-    );
+);
+
     
