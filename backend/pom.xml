@@ -6,13 +6,78 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.0</version>
+        <relativePath/>
+    </parent>
+
     <groupId>com.carauction</groupId>
     <artifactId>car-auction-analyzer</artifactId>
     <version>1.0.0</version>
+    <name>Car Auction Analyzer </name>
+    <description>Backend service for analyzing vehicle auction data.</description>
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-    </properties>
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+
+    <!-- Dependencies -->
+	<dependencies>
+
+        <!-- Spring Web (REST API) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+        <!-- Spring Data / PostgreSQL -->
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+        <dependency> 
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency> 
+
+        <!-- Flyway Database Migrations -->
+        <dependency> 
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency> 
+
+        <!-- Bean validation -->
+        <dependency> 
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency> 
+
+        <!-- Lombok -->
+        <dependency>  
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>  
+            <optional>true</optional>     
+        </dependency> 
+
+        <!-- Testing -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
