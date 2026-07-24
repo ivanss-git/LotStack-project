@@ -27,7 +27,7 @@ backup_Car_module.zip
 Car/
 
 # maven
-backend/target/
+target/
 
 # kaggle
 kaggle.json
