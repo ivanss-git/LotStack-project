@@ -9,13 +9,14 @@ CREATE TABLE vehicle_schema.vehicles (
     odometer INTEGER CHECK (odometer >= 0),
     make VARCHAR(100) NOT NULL,
     model VARCHAR(100) NOT NULL,
+    body_type VARCHAT(100) NOT NULL,
     trim VARCHAR(100),
     color VARCHAR(50),
     engine VARCHAR(100),
     transmission VARCHAR(50),
     drivetrain VARCHAR(20),
-    created_at TIMESTAMPZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
     
