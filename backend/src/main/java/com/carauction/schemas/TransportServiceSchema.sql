@@ -12,6 +12,6 @@ CREATE TABLE transportation_schema.transport_estimates(
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_transport_listing
-    FOREIGN KEY (listing_id),
-    REFERENCES auction_schema.listings(id)
+        FOREIGN KEY (listing_id),
+        REFERENCES auction_schema.listings(id)
 );
