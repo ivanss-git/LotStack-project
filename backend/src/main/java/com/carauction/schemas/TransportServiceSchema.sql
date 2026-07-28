@@ -2,12 +2,15 @@ CREATE SCHEMA IF NOT EXISTS transportation_schema;
 
 CREATE TABLE transportation_schema.transport_estimates(
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    listing_id BIGINT NOT NULL,
+    listing_id BIGINT NOT NULL UNIQUE,
     pickup_location VARCHAR(150) NOT NULL,
-    distance_miles INTEGER CHECK (distance_miles >= 0),
-    operational_status VARCHAR(30) NOT NULL,
+
+    distance_miles INTEGER
+        CHECK (distance_miles >= 0),
+
     estimated_cost NUMERIC(10, 2) NOT NULL
-    CHECK (estimated_cost >= 0),
+        CHECK (estimated_cost >= 0),
+
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
