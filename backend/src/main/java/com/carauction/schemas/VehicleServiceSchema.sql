@@ -1,18 +1,21 @@
 CREATE SCHEMA IF NOT EXISTS vehicle_schema; 
 
-CREATE TABLE vehicle_schema.attributes (
-    id INT,
-    vin INT,
-    year INT,
-    keys INT,
-    odometer DOUBLE PRECISION,
-    make VARCHAR(255),
-    model VARCHAR(255),
-    trim VARCHAR(255),
-    color VARCHAR(255),
-    engine VARCHAR(255),
-    transmission VARCHAR(255),
-    drivetrain VARCHAR(255)
+CREATE TABLE vehicle_schema.vehicles (
+    id BIGSERIAL PRIMARY KEY,
+    vin VARCHAR(17) UNIQUE,
+    model_year SMALLINT NOT NULL
+        CHECK (model_year BETWEEN 1886 AND 2100),
+    keys_present BOOLEAN,
+    odometer INTEGER CHECK (odometer >= 0),
+    make VARCHAR(100) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    trim VARCHAR(100),
+    color VARCHAR(50),
+    engine VARCHAR(100),
+    transmission VARCHAR(50),
+    drivetrain VARCHAR(20),
+    created_at TIMESTAMPZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
     
