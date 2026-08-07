@@ -29,16 +29,16 @@ CREATE TABLE auction_analyzer_schema.auction_pricing(
         CHECK (total_cost >= 0),
 
     max_bid NUMERIC(10, 2) NOT NULL
-        CHECK (max_bid >= 0)
+        CHECK (max_bid >= 0),
 
-    expected_profit NUMERIC(10, 2)
+    expected_profit NUMERIC(10, 2) NOT NULL,
 
-    is_good_purchase BOOLEAN NOT NULL
+    is_good_purchase BOOLEAN NOT NULL,
     
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_auction_pricing_listing
         FOREIGN KEY (listing_id)
-        REFERENCES auction_schema.listings(id),
+        REFERENCES vehicle_schema.vehicles(id)
 );

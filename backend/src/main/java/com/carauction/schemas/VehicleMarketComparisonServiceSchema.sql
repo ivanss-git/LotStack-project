@@ -22,7 +22,6 @@ CREATE TABLE market_comparison_schema.market_factors(
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    -- Ensures that purchase low is always less than purchase high --
     CONSTRAINT chk_purchase_price_range
         CHECK (
             purchase_price_low IS NULL
@@ -30,7 +29,6 @@ CREATE TABLE market_comparison_schema.market_factors(
             OR purchase_price_low <= purchase_price_high
         ),
     
-    -- Ensures that sell low price is always less than sell high price --
     CONSTRAINT chk_sell_price_range
         CHECK (
             sell_price_low IS NULL

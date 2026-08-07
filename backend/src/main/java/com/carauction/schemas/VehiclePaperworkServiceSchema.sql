@@ -19,12 +19,12 @@ CREATE TABLE paperwork_schema.paperwork_information(
     bill_of_sale_present BOOLEAN,
 
     auction_fees_receipt NUMERIC(10, 2)
-        CHECK (auctions_fees_receipt >= 0),
+        CHECK (auction_fees_receipt >= 0),
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_paperwork_listing
         FOREIGN KEY (listing_id)
-        REFERENCES auction_schema.listins(id)
+        REFERENCES auction_schema.listings(id)
 );
