@@ -7,9 +7,10 @@ import jakarta.persistence.*;
     name = "vehicles",
     schema = "vehicle_schema"
 )
+
 public class VehicleEntity extends BaseEntity { // Inherits id, createdAt, updatedAt
 
-    @Column(length = 17) // Removed @Enumerated unless vin is an Enum type
+    @Column(length = 17) 
     private String vin;
 
     @Column(nullable = false)

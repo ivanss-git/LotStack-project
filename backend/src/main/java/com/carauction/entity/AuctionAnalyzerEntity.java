@@ -6,15 +6,9 @@ import java.math.BigDecimal;
 @Entity
 @Table(
     name = "auction_pricing",
-    schema = "auction_analyzer_schema",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_auction_pricing_listing",
-            columnNames = "listing_id"
-        )
-    }
+    schema = "auction_analyzer_schema"
 )
-public class AuctionPricingEntity extends BaseEntity {
+public class AuctionAnalyzerEntity extends BaseEntity {
 
     // Maps external listing table relationship
     @OneToOne(fetch = FetchType.LAZY, optional = false)
@@ -59,12 +53,12 @@ public class AuctionPricingEntity extends BaseEntity {
     private Boolean isGoodPurchase; // automatically maps to is_good_purchase
 
     // Required default constructor for JPA
-    protected AuctionPricingEntity() {
+    protected AuctionAnalyzerEntity() {
         super();
     }
 
     // Full constructor for your service layer logic
-    public AuctionPricingEntity(
+    public AuctionAnalyzerEntity(
         VehicleEntity listing,
         BigDecimal purchasePrice,
         BigDecimal estimatedMarketValue,

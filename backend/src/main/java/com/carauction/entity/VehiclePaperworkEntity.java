@@ -6,13 +6,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(
     name = "paperwork_information",
-    schema = "paperwork_schema",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_paperwork_listing",
-            columnNames = "listing_id"
-        )
-    }
+    schema = "paperwork_schema"
 )
 
 public class VehiclePaperworkEntity extends BaseEntity {

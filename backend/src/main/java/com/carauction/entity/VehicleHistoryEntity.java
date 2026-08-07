@@ -5,13 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(
     name = "vehicle_history",
-    schema = "vehicle_history_schema",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_vehicle_history_vehicle",
-            columnNames = "vehicle_id"
-        )
-    }
+    schema = "vehicle_history_schema"
 )
 
 public class VehicleHistoryEntity extends BaseEntity {
@@ -22,7 +16,7 @@ public class VehicleHistoryEntity extends BaseEntity {
         nullable = false,
         foreignKey = @ForeignKey(name = "fk_vehicle_history_vehicle")
     )
-    private VehicleEntity vehicle;
+    private VehicleEntity listing;
 
     @Column(name = "previousOwners")
     private int previousOwners;
@@ -44,28 +38,28 @@ public class VehicleHistoryEntity extends BaseEntity {
     }
 
     public VehicleHistoryEntity(
-        VehicleEntity vehicle,
+        VehicleEntity listing,
         Integer previousOwners, 
         Integer previousAccidents, 
         String damageCode,
         String classification,
         String airbagStatus
     ) {
-        this.vehicle = vehicle;
+        this.listing = listing;
         this.previousOwners = previousOwners;
         this.previousAccidents = previousAccidents;
         this.damageCode = damageCode;
         this.classification = classification;
         this.airbagStatus = airbagStatus;
     }
-
+    public void setListing(VehicleEntity listing) { this.listing = listing;}
     public void setPreviousOwners(Integer previousOwners) { this.previousOwners = previousOwners;}
     public void setPreviousAccidents(Integer previousAccidents) { this.previousAccidents = previousAccidents;}
     public void setDamageCode(String damageCode) { this.damageCode = damageCode;}
     public void setClassification(String classification) { this.classification = classification;}
     public void setAirbagStatus(String airbagStatus) { this.airbagStatus = airbagStatus;}
 
-    public VehicleEntity getVehicle() { return vehicle;}
+    public VehicleEntity getListing() { return listing;}
     public Integer getPreviousOwners() { return previousOwners;}
     public Integer getPreviousAccidents() { return previousAccidents;}
     public String getDamageCode() { return damageCode;}
