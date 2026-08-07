@@ -47,13 +47,13 @@ public class AuctionAnalyzerEntity extends BaseEntity {
     private BigDecimal maxBid; 
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal expectedProfit; // automatically maps to expected_profit
+    private BigDecimal expectedProfit; 
 
     @Column(nullable = false)
-    private Boolean isGoodPurchase; // automatically maps to is_good_purchase
+    private Boolean isGoodPurchase; 
 
     // Required default constructor for JPA
-    protected AuctionAnalyzerEntity() {
+    public AuctionAnalyzerEntity() {
         super();
     }
 

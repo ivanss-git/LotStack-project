@@ -33,7 +33,7 @@ public class VehicleHistoryEntity extends BaseEntity {
     @Column(name = "airbag_status", length = 30)
     private String airbagStatus;                                                                                                                                                                                                                                                                                                                                                                                                    
 
-    protected VehicleHistoryEntity() {
+    public VehicleHistoryEntity() {
         super();
     }
 

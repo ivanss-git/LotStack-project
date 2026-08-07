@@ -42,7 +42,7 @@ public class VehicleTransportEstimateEntity extends BaseEntity {
     private BigDecimal estimatedCost;
 
     // Required default constructor for JPA
-    protected VehicleTransportEstimateEntity() {
+    public VehicleTransportEstimateEntity() {
         super();
     }
 
@@ -65,5 +65,9 @@ public class VehicleTransportEstimateEntity extends BaseEntity {
         this.vehicleType = vehicleType;
         this.additionalFees = additionalFees;
         this.estimatedCost = estimatedCost;
+    }
+
+    public BigDecimal getEstimatedCost() {
+        return this.estimatedCost;
     }
 }

@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 
 public class VehicleEntity extends BaseEntity { // Inherits id, createdAt, updatedAt
 
-    @Column(length = 17) 
+    @Column(nullable = false, unique = true, length = 17) 
     private String vin;
 
     @Column(nullable = false)
@@ -40,15 +40,13 @@ public class VehicleEntity extends BaseEntity { // Inherits id, createdAt, updat
     @Column(length = 100)
     private String engine;
 
-    @Enumerated(EnumType.STRING)
     @Column(length = 50)
     private String transmission;
 
-    @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private String drivetrain;
 
-    protected VehicleEntity() {
+    public VehicleEntity() {
         super();
     }
 

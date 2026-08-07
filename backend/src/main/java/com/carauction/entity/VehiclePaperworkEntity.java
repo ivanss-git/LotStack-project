@@ -36,7 +36,7 @@ public class VehiclePaperworkEntity extends BaseEntity {
     @Column(precision = 10, scale = 2)
     private BigDecimal auctionFees;
 
-    protected VehiclePaperworkEntity() {
+    public VehiclePaperworkEntity() {
         super();
     }
 
