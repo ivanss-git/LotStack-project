@@ -11,5 +11,5 @@ extends JpaRepository<VehicleEntity, Long> {
 
     boolean existsByVin(String vin);
 
-    List<VehicleEntity> findByMakeIgnoreCaseAndModelIgnorecase(String make, String model);
+    List<VehicleEntity> findByMakeIgnoreCaseAndModelIgnoreCase(String make, String model);
 }
