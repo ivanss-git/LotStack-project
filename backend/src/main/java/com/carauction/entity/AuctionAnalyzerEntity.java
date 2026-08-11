@@ -9,7 +9,7 @@ public class AuctionAnalyzerEntity extends BaseEntity {
 
     // Maps external listing table relationship
     @OneToOne(fetch=FetchType.LAZY,optional=false)
-    @JoinColumn(name="listing_id",nullable=false,foreignKey=@ForeignKey(name="fk_auction_pricing_listing"))
+    @JoinColumn(name="vehicle_id",nullable=false,foreignKey=@ForeignKey(name="fk_auction_pricing_listing"))
     private VehicleEntity vehicle;
 
     @Column(name="purchase_price",nullable=false,precision=12, scale=2)
