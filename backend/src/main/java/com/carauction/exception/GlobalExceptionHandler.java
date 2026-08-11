@@ -1,66 +1,34 @@
 package com.carauction.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.web.bind.annotation.*;
 import java.time.OffsetDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.time.ZoneOffset;
+import java.util.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(VehicleNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleVehicleNotFound(
-        VehicleNotFoundException exception
-    ) {
-        return buildResponse(
-            HttpStatus.NOT_FOUND,
-            exception.getMessage()
-        );
+    @ExceptionHandler(DuplicateResourceException.class) 
+    ResponseEntity<ApiError> conflict(DuplicateResourceException e,HttpServletRequest r) {
+        return build(HttpStatus.CONFLICT,e.getMessage(),r,Map.of());
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(
-        MethodArgumentNotValidException exception
-    ) {
-        String message = exception.getBindingResult()
-            .getFieldErrors()
-            .stream()
-            .findFirst()
-            .map(error ->
-                error.getField() + ": " + error.getDefaultMessage()
-            )
-            .orElse("Request validation failed");
-
-        return buildResponse(HttpStatus.BAD_REQUEST, message);
+    @ExceptionHandler(ResourceNotFoundException.class) 
+    ResponseEntity<ApiError> notFound(ResourceNotFoundException e,HttpServletRequest r) {
+        return build(HttpStatus.NOT_FOUND,e.getMessage(),r,Map.of());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> handleBadRequest(
-        IllegalArgumentException exception
-    ) {
-        return buildResponse(
-            HttpStatus.BAD_REQUEST,
-            exception.getMessage()
-        );
+    @ExceptionHandler(MethodArgumentNotValidException.class) 
+    ResponseEntity<ApiError> validation(MethodArgumentNotValidException e,HttpServletRequest r) {
+        Map<String,String> fields=new LinkedHashMap<>();
+        e.getBindingResult().getFieldErrors().forEach(x->fields.putIfAbsent(x.getField(),x.getDefaultMessage()));
+
+        return build(HttpStatus.BAD_REQUEST,"Validation failed",r,fields);
     }
 
-    private ResponseEntity<Map<String, Object>> buildResponse(
-        HttpStatus status,
-        String message
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-
-        body.put("timestamp", OffsetDateTime.now(ZoneOffset.UTC));
-        body.put("status", status.value());
-        body.put("error", status.getReasonPhrase());
-        body.put("message", message);
-
-        return ResponseEntity.status(status).body(body);
+    private ResponseEntity<ApiError> build(HttpStatus s,String m,HttpServletRequest r,Map<String,String> v) {
+        return ResponseEntity.status(s).body(new ApiError(OffsetDateTime.now(),s.value(),s.getReasonPhrase(),m,r.getRequestURI(),v));
     }
 }

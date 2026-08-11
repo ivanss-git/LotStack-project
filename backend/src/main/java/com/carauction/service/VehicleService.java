@@ -1,116 +1,96 @@
 package com.carauction.service;
-
-import com.carauction.dto.request.VehicleCreateRequest;
+import com.carauction.dto.request.VehicleRequest;
 import com.carauction.dto.response.VehicleResponse;
 import com.carauction.entity.VehicleEntity;
-import com.carauction.exception.VehicleNotFoundException;
+import com.carauction.exception.*;
 import com.carauction.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
-@Service
-public class VehicleService {
-
-    private final VehicleRepository vehicleRepository;
-
-    public VehicleService(VehicleRepository vehicleRepository) {
-        this.vehicleRepository = vehicleRepository;
-    }
-    
-    @Transactional
-    public VehicleResponse createdVehicle(VehicleCreateRequest request) {
-        VehicleEntity vehicle = new VehicleEntity();
-
-        vehicle.setVin(normalizeVin(request.vin()));
-        vehicle.setModelYear(request.modelYear());
-        vehicle.setKeysPresent(request.keysPresent());
-        vehicle.setOdometer(request.odometer());
-        vehicle.setMake(request.make().trim());
-        vehicle.setModel(request.model().trim());
-        vehicle.setBodyType(request.bodyType().trim().toUpperCase());
-        vehicle.setTrim(request.trim());
-        vehicle.setColor(request.color());
-        vehicle.setEngine(request.engine());
-        vehicle.setTransmission(normalize(request.transmission()));
-        vehicle.setDrivetrain( normalize(request.drivetrain()));
-    
-        VehicleEntity savedVehicle = vehicleRepository.save(vehicle);
-        return VehicleResponse.fromEntity(savedVehicle);
+@Service 
+@Transactional
+public class VehicleService {   
+    private final VehicleRepository repo;
+ 
+    public VehicleService(VehicleRepository repo) {
+        this.repo=repo;
     }
 
-    @Transactional(readOnly = true) 
-    public VehicleResponse getVehicle(Long id) {
-        VehicleEntity vehicle = findEntityById(id);
-        return VehicleResponse.fromEntity(vehicle);
+    public VehicleResponse create(VehicleRequest r) {
+        String vin=r.vin().trim().toUpperCase();
+
+        if(repo.existsByVin(vin)) 
+            throw new DuplicateResourceException("VIN already exists: "+vin);
+
+        return VehicleResponse.from(repo.save(entity(r,vin)));
     }
 
-    @Transactional(readOnly = true) 
-    public VehicleResponse getVehicleByVin(String vin) {
-        VehicleEntity vehicle = vehicleRepository.findByVin(normalizeVin(vin)).
-        orElseThrow(
-            () -> new IllegalArgumentException(
-                "Vehicle not found with VIN: " + vin
-            )
+    @Transactional(readOnly=true) 
+    public VehicleResponse get(Long id) {
+        return VehicleResponse.from(require(id));
+    }
+
+    @Transactional(readOnly=true) 
+    public VehicleResponse getByVin(String vin) {
+        return VehicleResponse.from(repo.findByVin(vin.toUpperCase()).orElseThrow(()->
+            new ResourceNotFoundException("Vehicle not found for VIN: "+vin))
         );
-        return VehicleResponse.fromEntity(vehicle);
     }
 
-    @Transactional(readOnly = true) 
-    public List<VehicleResponse> getAllVehicles() {
-        return vehicleRepository.findAll()
-            .stream()
-            .map(VehicleResponse::fromEntity)
-            .toList();
+    @Transactional(readOnly=true) 
+    public List<VehicleResponse> all() {
+        return repo.findAll().stream().map(VehicleResponse::from).toList();
     }
 
-    @Transactional
-    public VehicleResponse updatedVehicle(
-        Long id,
-        VehicleCreateRequest request
-    ) {
-        VehicleEntity vehicle = findEntityById(id);
-
-        vehicle.setVin(normalizeVin(request.vin()));
-        vehicle.setModelYear(request.modelYear());
-        vehicle.setKeysPresent(request.keysPresent());
-        vehicle.setOdometer(request.odometer());
-        vehicle.setMake(request.make().trim());
-        vehicle.setModel(request.model().trim());
-        vehicle.setBodyType(request.bodyType().trim().toUpperCase());
-        vehicle.setTrim(request.trim());
-        vehicle.setColor(request.color());
-        vehicle.setEngine(request.engine());
-        vehicle.setTransmission(normalize(request.transmission()));
-        vehicle.setDrivetrain(normalize(request.drivetrain()));
-
-        VehicleEntity updatedVehicle = vehicleRepository.save(vehicle);
-        return VehicleResponse.fromEntity(updatedVehicle);
+    public VehicleResponse update(Long id,VehicleRequest r) {
+        VehicleEntity v=require(id);
+        String vin=r.vin().trim().toUpperCase();
+        repo.findByVin(vin)
+            .filter(x->!x.getId().equals(id))
+            .ifPresent(x->{throw new DuplicateResourceException("VIN already exists: "+vin);}
+        );
+        
+        v.update(
+            vin,
+            r.modelYear(),
+            r.keysPresent(),
+            r.odometer(),
+            r.make(),
+            r.model(),
+            r.bodyType(),
+            r.trim(),
+            r.color(),
+            r.engine(),
+            r.transmission(),
+            r.drivetrain()
+        );
+        return VehicleResponse.from(v);
+    }
+    public void delete(Long id) {
+        repo.delete(require(id));
+    
+    }
+    public VehicleEntity require(Long id) {
+        return repo.findById(id).orElseThrow(()->
+            new ResourceNotFoundException("Vehicle not found: "+id)
+        );
     }
 
-    @Transactional
-    public void deleteVehicle(Long id) {
-        VehicleEntity vehicle = findEntityById(id);
-        vehicleRepository.delete(vehicle);
-    }
-
-    private VehicleEntity findEntityById(Long id) {
-        return vehicleRepository.findById(id)
-            .orElseThrow(() -> new VehicleNotFoundException(id));
-    }
-
-    private String normalizeVin(String vin) {
-        if (vin == null || vin.isBlank()) {
-            return null;
-        } 
-        return vin.trim().toUpperCase();
-    }
-
-    private String normalize(String value) {
-        if (value == null || value.isBlank()) {
-            return null;
-        }
-        return value.trim().toUpperCase();
+    private VehicleEntity entity(VehicleRequest r,String vin) {
+        return new VehicleEntity(
+            vin,
+            r.modelYear(),
+            r.keysPresent(),
+            r.odometer(),
+            r.make(),
+            r.model(),
+            r.bodyType(),
+            r.trim(),
+            r.color(),
+            r.engine(),
+            r.transmission(),
+            r.drivetrain()
+        );
     }
 }

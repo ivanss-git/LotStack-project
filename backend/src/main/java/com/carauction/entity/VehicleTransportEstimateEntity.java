@@ -4,70 +4,81 @@ import java.math.BigDecimal;
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-    name = "vehicle_transport_estimate",
-    schema = "vehicle_transport_estimate_schema"
-)
-
+@Table(name="vehicle_transport_estimate",schema="vehicle_transport_estimate_schema")
 public class VehicleTransportEstimateEntity extends BaseEntity {
 // 1. Missing relationship to the vehicle/listing
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch=FetchType.LAZY,optional=false)
     @JoinColumn(
-        name = "listing_id", 
-        nullable = false, 
-        foreignKey = @ForeignKey(name = "fk_transport_estimate_listing")
+        name="vehicle_id", 
+        nullable=false, 
+        unique=true,
+        foreignKey=@ForeignKey(name="fk_transport_estimate_listing")
     )
-    private VehicleEntity listing;
+    private VehicleEntity vehicle;
 
-    @Column(name = "pickup_location", nullable = false)
+    @Column(name="pickup_location",nullable=false)
     private String pickupLocation;
 
-    @Column(name = "distance_in_miles", nullable = false)
+    @Column(name="distance_in_miles",nullable=false)
     private Integer distanceInMiles;
 
-    @Column(nullable = false)
+    @Column(nullable=false)
     private String operability;
 
-    @Column(name = "trailer_type", nullable = false)
+    @Column(name="trailer_type",nullable=false)
     private String trailerType;
 
-    @Column(name = "vehicle_type", nullable = false)
+    @Column(name="vehicle_type",nullable=false)
     private String vehicleType;
 
-    // 2. Changed from double to BigDecimal to prevent currency rounding errors
-    @Column(name = "additional_fees", nullable = false, precision = 10, scale = 2)
+    @Column(name="additional_fees",nullable=false,precision=12,scale=2)
     private BigDecimal additionalFees;
 
-    @Column(name = "estimated_cost", nullable = false, precision = 10, scale = 2)
+    @Column(name="estimated_cost",nullable=false,precision=10,scale=2)
     private BigDecimal estimatedCost;
 
     // Required default constructor for JPA
-    public VehicleTransportEstimateEntity() {
-        super();
-    }
+    protected VehicleTransportEstimateEntity() {}
 
     // Full constructor for your service layer logic
     public VehicleTransportEstimateEntity(
-            VehicleEntity listing,
-            String pickupLocation,
-            Integer distanceInMiles,
+            VehicleEntity vehicle,
+            String pickup,
+            Integer miles,
             String operability,
-            String trailerType,
-            String vehicleType,
-            BigDecimal additionalFees,
-            BigDecimal estimatedCost
+            String trailer,
+            String type,
+            BigDecimal fees,
+            BigDecimal cost
     ) {
-        this.listing = listing;
-        this.pickupLocation = pickupLocation;
-        this.distanceInMiles = distanceInMiles;
-        this.operability = operability;
-        this.trailerType = trailerType;
-        this.vehicleType = vehicleType;
-        this.additionalFees = additionalFees;
-        this.estimatedCost = estimatedCost;
+        this.vehicle = vehicle;
+        update(pickup,miles,operability,trailer,type,fees,cost);
     }
 
-    public BigDecimal getEstimatedCost() {
-        return this.estimatedCost;
+    public void update(
+        String pickup, 
+        Integer miles,
+        String operability,
+        String trailer,
+        String type,
+        BigDecimal fees,
+        BigDecimal cost
+    ) {
+        pickupLocation = pickup;
+        distanceInMiles = miles;
+        this.operability = operability;
+        trailerType = trailer;
+        vehicleType = type;
+        additionalFees = fees;
+        estimatedCost = cost;
     }
+
+    public VehicleEntity getVehicle() { return vehicle;}
+    public String getPickupLocation() { return pickupLocation;}
+    public Integer getDistanceInMiles() { return distanceInMiles;}
+    public String getOperability() { return operability;}
+    public String getTrailerType() { return trailerType;}
+    public String getVehicleType() { return vehicleType;}
+    public BigDecimal getAdditionalFees() { return additionalFees;}
+    public BigDecimal getEstimatedCost() { return estimatedCost;}
 }

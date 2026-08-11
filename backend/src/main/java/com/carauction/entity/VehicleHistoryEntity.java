@@ -3,66 +3,59 @@ package com.carauction.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-    name = "vehicle_history",
-    schema = "vehicle_history_schema"
-)
-
+@Table(name="vehicle_history",schema="history_schema")
 public class VehicleHistoryEntity extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch=FetchType.LAZY,optional=false)
     @JoinColumn(
-        name = "vehicle_id",
-        nullable = false,
-        foreignKey = @ForeignKey(name = "fk_vehicle_history_vehicle")
+        name="vehicle_id",
+        nullable=false,
+        unique=true,
+        foreignKey=@ForeignKey(name="fk_history_vehicle")
     )
-    private VehicleEntity listing;
+    private VehicleEntity vehicle;
 
-    @Column(name = "previousOwners")
-    private int previousOwners;
+    @Column(name="previous_owners")
+    private Integer previousOwners;
 
-    @Column(name = "previousAccidents")
-    private int previousAccidents;
+    @Column(name="previous_accidents")
+    private Integer previousAccidents;
 
-    @Column(name = "damageCode", length = 50)
+    @Column(name="damage_code",length=50)
     private String damageCode;
 
-    @Column(name = "classification", nullable = false, length = 50)
+    @Column(nullable=false,length=50)
     private String classification;
 
-    @Column(name = "airbag_status", length = 30)
+    @Column(name="airbag_status",length=30)
     private String airbagStatus;                                                                                                                                                                                                                                                                                                                                                                                                    
 
-    public VehicleHistoryEntity() {
-        super();
-    }
+    protected VehicleHistoryEntity() {}
 
     public VehicleHistoryEntity(
-        VehicleEntity listing,
-        Integer previousOwners, 
-        Integer previousAccidents, 
-        String damageCode,
+        VehicleEntity vehicle,
+        Integer owners, 
+        Integer accidents, 
+        String damage,
         String classification,
-        String airbagStatus
+        String airbag
     ) {
-        this.listing = listing;
-        this.previousOwners = previousOwners;
-        this.previousAccidents = previousAccidents;
-        this.damageCode = damageCode;
-        this.classification = classification;
-        this.airbagStatus = airbagStatus;
+        this.vehicle = vehicle;
+        update(owners,accidents,damage,classification,airbag);
     }
-    public void setListing(VehicleEntity listing) { this.listing = listing;}
-    public void setPreviousOwners(Integer previousOwners) { this.previousOwners = previousOwners;}
-    public void setPreviousAccidents(Integer previousAccidents) { this.previousAccidents = previousAccidents;}
-    public void setDamageCode(String damageCode) { this.damageCode = damageCode;}
-    public void setClassification(String classification) { this.classification = classification;}
-    public void setAirbagStatus(String airbagStatus) { this.airbagStatus = airbagStatus;}
 
-    public VehicleEntity getListing() { return listing;}
+    public void update(Integer owners, Integer accidents, String damage, String classification, String airbag) {
+        previousOwners = owners;
+        previousAccidents = accidents;
+        damageCode = damage;
+        this.classification = classification;
+        airbagStatus = airbag;
+    }
+
+    public VehicleEntity getVehicle() { return vehicle;}
     public Integer getPreviousOwners() { return previousOwners;}
     public Integer getPreviousAccidents() { return previousAccidents;}
     public String getDamageCode() { return damageCode;}
     public String getClassification() { return classification;}
-    public String getAirbagStatus() { return airbagStatus;}
+    public String getAirbagStatus() { return airbagStatus;}   
 }

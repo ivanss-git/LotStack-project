@@ -4,81 +4,56 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(
-    name = "paperwork_information",
-    schema = "paperwork_schema"
-)
-
+@Table(name="paperwork_information",schema="paperwork_schema")
 public class VehiclePaperworkEntity extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch=FetchType.LAZY,optional=false)
     @JoinColumn(
-        name = "listing_id",
-        nullable = false,
-        foreignKey = @ForeignKey(name = "fk_paperwork_listing")
+        name="vehicle_id",
+        nullable=false,
+        unique=true,
+        foreignKey=@ForeignKey(name="fk_paperwork_listing")
     )
-    private VehicleEntity listing;
+    private VehicleEntity vehicle;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
+    @Column(name="title_status",nullable=false,length=30)
     private String titleStatus;
 
-    @Column(length = 2)
+    @Column(name="title_state",length=2)
     private String titleState;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 30)
+    @Column(name="lien_status",length=30)
     private String lienStatus;
 
-    @Column
+    @Column(name="bill_of_sale_present")
     private Boolean billOfSalePresent;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name="auction_fees",precision=12,scale=2)
     private BigDecimal auctionFees;
 
-    public VehiclePaperworkEntity() {
-        super();
-    }
+    protected VehiclePaperworkEntity() {}
 
     public VehiclePaperworkEntity(
-        VehicleEntity listing,
+        VehicleEntity vehicle,
         String titleStatus,
         String titleState,
         String lienStatus,
-        Boolean billOfSalePresent,
-        BigDecimal auctionFees
+        Boolean bill,
+        BigDecimal fees
     ) {
-        this.listing = listing;
+        this.vehicle = vehicle;
+        update(titleStatus,titleState,lienStatus,bill,fees);
+    }
+
+    public void update(String titleStatus, String titleState, String lienStatus, Boolean bill, BigDecimal fees) {
         this.titleStatus = titleStatus;
         this.titleState = titleState;
         this.lienStatus = lienStatus;
-        this.billOfSalePresent = billOfSalePresent;
-        this.auctionFees = auctionFees;
+        billOfSalePresent = bill;
+        auctionFees = fees;
     }
 
-    public void setListing(VehicleEntity listing) { this.listing = listing;}
-
-    public void setTitleStatus(String titleStatus) {
-        this.titleStatus = titleStatus;
-    }
-
-    public void setTitleState(String titleState) {
-        this.titleState = titleState;
-    }
-
-    public void setLienStatus(String lienStatus) {
-        this.lienStatus = lienStatus;
-    }
-
-    public void setBillOfSalePresent(Boolean billOfSalePresent) {
-        this.billOfSalePresent = billOfSalePresent;
-    }
-
-    public void setAuctionFees(BigDecimal auctionFees) {
-        this.auctionFees = auctionFees;
-    }
-
-    public VehicleEntity getListing() { return listing;}
+    public VehicleEntity getVehicle() { return vehicle;}
     public String getTitleStatus() { return titleStatus;}
     public String getTitleState() { return titleState;}
     public String getLienStatus() { return lienStatus;}

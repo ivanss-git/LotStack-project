@@ -20,23 +20,23 @@ public record VehicleResponse(
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt 
 ) { 
-    public static VehicleResponse fromEntity(VehicleEntity vehicle) {
+    public static VehicleResponse from(VehicleEntity v) {
         return new VehicleResponse(
-            vehicle.getId(),
-            vehicle.getVin(),
-            vehicle.getModelYear(),
-            vehicle.getKeysPresent(),
-            vehicle.getOdometer(),
-            vehicle.getMake(),
-            vehicle.getModel(),
-            vehicle.getBodyType(),
-            vehicle.getTrim(),
-            vehicle.getColor(),
-            vehicle.getEngine(),
-            vehicle.getTransmission(),
-            vehicle.getDrivetrain(),
-            vehicle.getCreatedAt(),
-            vehicle.getUpdatedAt()
+            v.getId(),
+            v.getVin(),
+            v.getModelYear(),
+            v.getKeysPresent(),
+            v.getOdometer(),
+            v.getMake(),
+            v.getModel(),
+            v.getBodyType(),
+            v.getTrim(),
+            v.getColor(),
+            v.getEngine(),
+            v.getTransmission(),
+            v.getDrivetrain(),
+            v.getCreatedAt(),
+            v.getUpdatedAt()
         );
     }
 }
