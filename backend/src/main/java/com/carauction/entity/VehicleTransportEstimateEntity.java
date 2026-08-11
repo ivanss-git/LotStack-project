@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="vehicle_transport_estimate",schema="vehicle_transport_estimate_schema")
+@Table(name="vehicle_transport_estimate",schema="transport_schema")
 public class VehicleTransportEstimateEntity extends BaseEntity {
 // 1. Missing relationship to the vehicle/listing
     @OneToOne(fetch=FetchType.LAZY,optional=false)
@@ -12,7 +12,7 @@ public class VehicleTransportEstimateEntity extends BaseEntity {
         name="vehicle_id", 
         nullable=false, 
         unique=true,
-        foreignKey=@ForeignKey(name="fk_transport_estimate_listing")
+        foreignKey=@ForeignKey(name="fk_transport_vehicle")
     )
     private VehicleEntity vehicle;
 
@@ -34,7 +34,7 @@ public class VehicleTransportEstimateEntity extends BaseEntity {
     @Column(name="additional_fees",nullable=false,precision=12,scale=2)
     private BigDecimal additionalFees;
 
-    @Column(name="estimated_cost",nullable=false,precision=10,scale=2)
+    @Column(name="estimated_cost",nullable=false,precision=12,scale=2)
     private BigDecimal estimatedCost;
 
     // Required default constructor for JPA
