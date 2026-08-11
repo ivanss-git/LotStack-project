@@ -1,0 +1,11 @@
+# Testing
+- Happy Path: Valid input produces the expected result
+- Validation: Missing, malinformed, and out of range input is rejected
+- Not found: Uknown IDs return 404
+- Conflict: Duplicates or invalid state changes return 409
+- Authorization: Users cannot access operations they don't own
+- Persistence: Saved data remains after restart
+- Relationships: Foreign keys and cascade behavior work
+- Errors: Responses are useful and don't expose stack traces
+- Boundaries: Empty lists, zero values, maximum sizes, and nulls
+- Conurrency: Simultaneous requests don't corrupt data
