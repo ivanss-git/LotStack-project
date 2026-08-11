@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface VehiclePaperworkRepository extends JpaRepository<VehiclePaperworkEntity, Long> {
     Optional<VehiclePaperworkEntity> findByVehicle_Id(Long id);
 
-    Optional<VehiclePaperworkEntity> findyByVehicle_Vin(String vin);
+    Optional<VehiclePaperworkEntity> findByVehicle_Vin(String vin);
 
     boolean existsByVehicle_vin(Long id);
     
