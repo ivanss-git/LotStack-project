@@ -32,3 +32,5 @@ target/
 # kaggle
 kaggle.json
 **/kaggle.json
+.DS_Store
+**/.DS_Store
