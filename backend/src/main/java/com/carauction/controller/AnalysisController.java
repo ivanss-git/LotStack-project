@@ -17,8 +17,11 @@ public class AnalysisController{
 
     @PutMapping
     public AnalysisResponse analyze(
-            @PathVariable Long vehicleId,
-            @Valid @RequestBody
+            @PathVariable 
+            Long vehicleId,
+            
+            @Valid 
+            @RequestBody
             AnalysisRequest r){
                 return service.analyze(vehicleId,r);
     }
