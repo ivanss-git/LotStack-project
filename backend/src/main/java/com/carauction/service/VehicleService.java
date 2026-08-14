@@ -72,8 +72,9 @@ public class VehicleService {
     
     }
     public VehicleEntity require(Long id) {
-        return repo.findById(id).orElseThrow(()->
-            new ResourceNotFoundException("Vehicle not found: "+id)
+        return repo.findById(id)
+            .orElseThrow(()->
+                new ResourceNotFoundException("Vehicle not found: "+id)
         );
     }
 
