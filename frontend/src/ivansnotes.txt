@@ -1,0 +1,124 @@
+App.tsx - The main entry point for the visual layout
+main.tsx - The engine that renders the page, you rarely need to touch it.
+App.css/Index.css - handle styling, fonts, colors, and layouts.
+assets - This is where you store images, icons, or local fonts.
+
+I created it locally using React, and will be running it using vite (Typescript + SWC)
+for developomemt with vercel and later hosting it on AWS for production
+
+The SWC compiler instantly processes the typescript code every time you save a file,
+keeping it updated in ms.
+
+Vercel (frontend): The gold standard for hosting reacts frontends.
+You wil connect it directly to your github repo, and it will automatically build your app 
+and deploy it to a global content delivery network (CDN).
+
+AWS (Backend and DB): AWS does all the heavy lifting
+
+Adding pictures: For normal react images, they would go under assets as a .jpg file
+The import proess is "import product from ".. /..path/to/pic",
+then you use the keyword fuction and give it a name.
+finally, you return the body and include your desired outcome like
+
+Syntax: Is similar to the xml file
+Main container: The general purpose container that groups other eleemnts together.
+    <div className="> ... body ... </div> 
+Header Block: This contains the top of the section of the page.
+    <header className="> ...
+        <h1> is the main page heading
+        <p> is a paragraph or text block
+Main Block: Holds the primary content of the page (nornmaly just one).
+    <main className="> ... </main>
+Section Block: Groups related content, the entire collection.
+    <section className=""> .. </section>
+Article Block: Represents one individual piece of content.
+    <article className=""> .. </article>
+
+Types (similat to a class): all field must follow this
+    type name = {
+        id: number;
+        url: String; //path to image jpg .. 
+    }
+
+The typed array: This is an array containing purchase objects.
+    const examplePurchases: Purchae[] = [];
+    Purchase is the array containing purchase objects
+
+Typed State: this creates the react state
+    const [purchases, setPurchases] = 
+        useState<Purchase[]>(examplePurchases);
+
+    const [error, setError] = useState<string>("");
+Image block: The image receives its information from the purchaser;
+src is the image location, alt describes the image for accessibilty,
+andnimg closes itself because it does not contain child elements.
+
+    <img className="" 
+    src={purchase.imageUrl}
+    alt={purchase.prouctName}
+    />
+
+Text Values inside Braces: means run js extension and display its values
+    $ is oridnary displayed content
+    { inside of here is JavaScript}
+    toFixed(#) displays # amount of decimal places
+
+Displaying repeated cards: .map() goes through every item in the array
+    key helps react identify each card - key={purchase.id} and should be unique
+    {purchase.map((purchase) => (
+        <article key={purchase.id}>
+        <h2>{purchase.productName}</h2>
+        </article>
+    ))}
+
+Conditional Blocks: for error handling and what not
+    {isLoading && (
+        <p>Loading purchases ... </p
+    )} says is loading is true then display the graph
+    
+    error condition works the same way
+    {error && (
+        <p>{error}</p>
+    )}
+
+Button Click: creates a clickable button
+    <button> creates a clickable button
+    type="button" prevents accidental form submission
+    onClick says what would happen when clicked
+    () => creates a function that waits for the click
+    removePurchase(purchase.id) removes that particular purchase
+
+Adding pictures: place them in image folder but dont include "public" in the url
+
+Getting actual backend data later: 
+    useEffect(() => {
+    async function loadPurchases() {
+        try {
+        setIsLoading(true);
+        setError("");
+
+        const response = await fetch(
+            "http://localhost:8080/api/purchases"
+        );
+
+        if (!response.ok) {
+            throw new Error("Could not load purchases");
+        }
+
+        const data: Purchase[] = await response.json();
+        setPurchases(data);
+        } catch (error: unknown) {
+        if (error instanceof Error) {
+            setError(error.message);
+        } else {
+            setError("An unexpected error occurred");
+        }
+        } finally {
+        setIsLoading(false);
+        }
+    }
+
+    loadPurchases();
+    }, []);
+
+
