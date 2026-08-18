@@ -20,15 +20,6 @@ function App() {
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
-
-          <p>
-            
-            Hello Mr. Leo. 
-
-            This is the react base that i need to add shit to :p
-          
-          </p>
-
         </div>
         <button
           type="button"
@@ -52,13 +43,13 @@ function App() {
             <li>
               <a href="https://vite.dev/" target="_blank">
                 <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
+                {' '}Explore Vite
               </a>
             </li>
             <li>
               <a href="https://react.dev/" target="_blank">
                 <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
+                {' '}Learn more
               </a>
             </li>
           </ul>
