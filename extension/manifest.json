@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Car Auction Analyzer",
+  "description": "Displays car auction recommendations and risk scores.",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "host_permissions": [
+    "http://localhost:8080/*"
+  ]
+}

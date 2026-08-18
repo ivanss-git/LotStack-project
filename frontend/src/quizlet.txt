@@ -1,0 +1,61 @@
+React Core Synatx
+
+Functional Component: 
+    A js function that returns jsx, which basically let's you write
+    code that looks like html inside of you're js code.
+
+    FCs are simpler and easier to understand compared to class components/
+    They can accepts arguments and allow for dynamic rendering.
+
+    function name(param) { return <h1> text, {props.name}}
+
+    hooks: manage state and lifecycle events.
+    FCs are stateles by default but allow you to manage state using hooks.
+
+Component Export and Import:
+    components must be exported so you can use them in other files.
+
+    export default ComponentName;
+    import ComponentName from'./ComponentName';
+
+    ex: export default function MyComponent() { return <div>MyComponent</div>;}
+
+The useState hookk:
+    used to declare a local state variable and its setter function, allowing FCs to manage state.
+    applies to all types, objs, and arrays.
+    Asynchronous: calling state function doesn't change val right away;
+    ^ framework queues the request and waits for the current code block to finish before triggering a re-render.
+        
+    const [value, setValue] = useState(initialValue);
+
+JSX and Rendering
+    <>...</> allows you to group multiple elements without adding extra nodes to the DOM.
+
+    self closing tags are useful for components that don't have children.
+    ex: <imh src='image.png' alr='description' />
+
+    so basically, if a component or HTML element stands alone and does not wrap any content,
+    you self-close it right away
+
+    ex: <Component /> only takes data through props but has no nested text or tags inside it.
+    <Component>...</Component> only if you need to put text/vars/other elements inside.
+
+
+    <UserProfile user={currentUser} />
+     vs.
+    <Layout>
+        <UserProfile user={currentUser} />
+    </Layout>
+
+Inline Styling and Class Names: applied using a js object
+    allows for dynamic styling (changes on its own) based on state or props
+
+    ex: style={{ color: 'red', fontSize: '14px' }}
+    the classname att is used instead of class,
+    which specifies css classes in react
+
+    className='my-class-name'
+    necessary bc class is a js keyword
+    ex: <div className='container'>Content</div>
+    applies the container class to the div
+    inline style takes precedence over external stylesheets.
