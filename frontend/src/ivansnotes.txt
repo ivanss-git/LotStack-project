@@ -15,8 +15,9 @@ Creating the frontend:
     npm create vite@latest
 
 Running the frontend:
+    cd frontend
+    npm install
     npm run dev -- --host
-
 
 I created it locally using React, and will be running it using vite (Typescript + SWC)
 for developomemt with vercel and later hosting it on AWS for production
