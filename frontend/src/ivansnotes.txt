@@ -10,9 +10,13 @@ Running the backend:
 Backend test output: 
     curl -s 'http://localhost:8080/api/demo/recommendations?limit=3' | jq
 
+Creating the frontend:
+    cd to frontend folder
+    npm create vite@latest
 
 Running the frontend:
     npm run dev -- --host
+
 
 I created it locally using React, and will be running it using vite (Typescript + SWC)
 for developomemt with vercel and later hosting it on AWS for production
