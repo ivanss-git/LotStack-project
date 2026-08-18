@@ -3,6 +3,17 @@ main.tsx - The engine that renders the page, you rarely need to touch it.
 App.css/Index.css - handle styling, fonts, colors, and layouts.
 assets - This is where you store images, icons, or local fonts.
 
+Running the backend: 
+    mvn clean test
+    mvn spring-boot:run
+
+Backend test output: 
+    curl -s 'http://localhost:8080/api/demo/recommendations?limit=3' | jq
+
+
+Running the frontend:
+    npm run dev -- --host
+
 I created it locally using React, and will be running it using vite (Typescript + SWC)
 for developomemt with vercel and later hosting it on AWS for production
 
