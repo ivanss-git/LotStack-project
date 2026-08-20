@@ -1,0 +1,82 @@
+vin: 1GD42VCY3JF249235
+year: 2018
+make: GMC
+model: Sierra K3500HD
+trim: SLE
+purchase price: 8,500
+repair cost: 
+    rontend suspension: 
+        kit: $700.00
+        labor: $325.00
+        alignment: $100.00
+        total: $1080.00
+        cleaning: $180.00
+Fees:
+    Environmental Fee: $15.00
+    Internet Bid Fee: $140.00
+    Gate Fee: $95.00
+    Title Pickup Fee: $20.00
+    Charges and Payments: $8,500.00
+    Buyer Fee: $1,275.00
+    Sales Tax: $125.85
+    
+    Repair + fees= $11,295.85
+
+sale price: 23,500
+roi: 108.04%
+
+vin: 3GTU2PEC8JG526641
+year: 2018
+make: GMC
+model: Sierra K1500
+trim: Denali
+purchase price: 
+    base: $14,800.00
+    fees: $1078.00 (
+        virtual bid fee: $149.00
+        gate fee: $79.00
+        title mailing: $5.00
+        fedex mailing: $5.00
+        storage: $25.00
+        buyer fee: $850.00
+    )
+repair cost:
+    battery: $379.99 Optima Yellow 94R / H7 $379.99
+    Airbag: $1205.91 steering wheel airbag 
+    Seat-mounted Airbags: 
+sale price:
+roi:
+
+
+
+
+
+vin: 
+year: 1997
+make: Chevrolet
+model: C1500
+trim: Base
+purchase price:
+repair cost:
+sale price:
+roi:
+
+vin: 
+year:
+make:
+model:
+trim:
+purchase price:
+repair cost:
+sale price:
+roi:
+
+vin: 
+year:
+make:
+model:
+trim:
+purchase price:
+repair cost:
+sale price:
+roi:
