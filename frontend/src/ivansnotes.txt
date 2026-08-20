@@ -18,6 +18,13 @@ Running the frontend:
     cd frontend
     npm install
     npm run dev -- --host
+    later added --host to scrips in package .json
+
+Frontend extension:
+    extensions stay insyalled once loaded
+    they run independently and autoupdate for modified code
+    must manually remove if you need to shut it down
+    reload when: you move folder, rename, or remove it from chrome
 
 I created it locally using React, and will be running it using vite (Typescript + SWC)
 for developomemt with vercel and later hosting it on AWS for production
