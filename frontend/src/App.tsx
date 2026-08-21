@@ -39,79 +39,49 @@ function App() {
         justifyContent: 'center'
       }}>
 
-        {/* Shared Styling structure via a reuseable style object */}
-        {/* Column 1: Total Capital Invested */}
-        <div style={{
-          flex: 1,                       //ensures box grows evenly and shares space
-          display: 'flex',               // left aligned text
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '4px', 
-          whiteSpace: 'nowrap',
-          backgroundColor: '#ffffff',
-          border: '1px solid #e2e8f0', // Clean card border
-          borderRadius: '12px',          // Rounded container box corners
-          padding: '24px',               // Breathing space inside individual boxes
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-        }}>
-          <div style={{ margin: 0 }}><h2 style={{ fontSize: '14px', color: '#64748b', margin: 0, fontWeight: 500}}> Total Capital Invested</h2></div>
-          <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#0f172a', marginTop: '4px' }}>$15,000.00</div> 
-        </div>
-        
-        {/* Column 2: Total Gross Profit */}
-        <div style={{ 
-          flex: 1,
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          gap: '4px', 
-          whiteSpace: 'nowrap',
-          backgroundColor: '#ffffff',
-          border: '1px solid #e2e8f0',
-          borderRadius: '12px',
-          padding: '24px',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' 
-          }}>
-          <div><h2 style={{ fontSize: '14px', color: '#64748b', margin: 0, fontWeight: 500 }}>Total Gross Profit</h2></div>
-          <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#0f172a', marginTop: '4px' }}>$15,000.00</div>
-        </div>
+        {/* Dynamically looping over metric array to remove repeated code */}
+        {metrics.map((card) => (
+             <div 
+                key={card.title}
+                style={{
+                flex: 1,                       //ensures box grows evenly and shares space
+                display: 'flex',               // left aligned text
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '4px', 
+                whiteSpace: 'nowrap',
+                backgroundColor: '#ffffff',
+                border: '1px solid #e2e8f0', // Clean card border
+                borderRadius: '12px',          // Rounded container box corners
+                padding: '24px',               // Breathing space inside individual boxes
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+                boxSizing: 'border-box'
+                }}
+              >
+                {/* Title / Description */}
+                <div style={{ margin: 0 }}>
+                  <h2 style={{ 
+                    fontSize: '14px', 
+                    color: '#64748b',         // Slate gray label color
+                    margin: 0, 
+                    fontWeight: 500
+                  }}>
+                    {card.title}
+                  </h2>
+                </div> 
 
-        {/* Column 3: Total Revenue */}
-        <div style={{ 
-          flex: 1,
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          gap: '4px', 
-          whiteSpace: 'nowrap',
-          backgroundColor: '#ffffff',
-          border: '1px solid #e2e8f0',
-          borderRadius: '12px',
-          padding: '24px',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-          }}>
-          <div><h2 style={{ fontSize: '14px', color: '#64748b', margin: 0, fontWeight: 500}}>Total Gross Profit</h2></div>
-          <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#0f172a', marginTop: '4px' }}>$3,000.00</div>
-        </div>
-
-        {/* Column 4: Total ROI */}
-        <div style={{ 
-          flex: 1,
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          gap: '4px',
-          whiteSpace: 'nowrap',
-          backgroundColor: '#ffffff',
-          border: '1px solid #e2e8f0',
-          borderRadius: '12px',
-          padding: '24px',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-          }}>
-          <div><h2 style={{ fontSize: '14px', color: '#64748b', margin: 0, fontWeight: 500 }}>Total ROI</h2></div>
-          <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#4CAF50', marginTop: '4px' }}>20.00%</div>
-        </div>
-      
+                {/* Numerical Value */}
+            <div style={{ 
+              fontSize: '28px', 
+              fontWeight: 'bold', 
+              color: card.isPositive ? '#4CAF50' : '#0f172a', // Dynamic color if ROI is green
+              marginTop: '4px' 
+            }}>
+              {card.value}
+            </div> 
+          </div> 
+        ))}
+     
       </section>
 
     </div>
