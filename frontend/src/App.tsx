@@ -41,36 +41,36 @@ function App() {
 
         {/* Dynamically looping over metric array to remove repeated code */}
         {metrics.map((card) => (
-             <div 
-                key={card.title}
-                style={{
-                flex: 1,                       //ensures box grows evenly and shares space
-                display: 'flex',               // left aligned text
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '4px', 
-                whiteSpace: 'nowrap',
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0', // Clean card border
-                borderRadius: '12px',          // Rounded container box corners
-                padding: '24px',               // Breathing space inside individual boxes
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-                boxSizing: 'border-box'
-                }}
-              >
-                {/* Title / Description */}
-                <div style={{ margin: 0 }}>
-                  <h2 style={{ 
-                    fontSize: '14px', 
-                    color: '#64748b',         // Slate gray label color
-                    margin: 0, 
-                    fontWeight: 500
-                  }}>
-                    {card.title}
-                  </h2>
-                </div> 
+          <div 
+              key={card.title}
+              style={{
+              flex: 1,                       //ensures box grows evenly and shares space
+              display: 'flex',               // left aligned text
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: '4px', 
+              whiteSpace: 'nowrap',
+              backgroundColor: '#ffffff',
+              border: '1px solid #e2e8f0', // Clean card border
+              borderRadius: '12px',          // Rounded container box corners
+              padding: '24px',               // Breathing space inside individual boxes
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+              boxSizing: 'border-box'
+              }}
+            >
+              {/* Title / Description */}
+              <div style={{ margin: 0 }}>
+                <h2 style={{ 
+                  fontSize: '14px', 
+                  color: '#64748b',         // Slate gray label color
+                  margin: 0, 
+                  fontWeight: 500
+                }}>
+                  {card.title}
+                </h2>
+              </div> 
 
-                {/* Numerical Value */}
+            {/* Numerical Value */}
             <div style={{ 
               fontSize: '28px', 
               fontWeight: 'bold', 
@@ -81,9 +81,7 @@ function App() {
             </div> 
           </div> 
         ))}
-     
       </section>
-
     </div>
   );
 }
