@@ -1,8 +1,6 @@
 interface MetricCardProps {
-  icon?: string;
   title: string;
   value: string | number;
-  iconBgColor?: string;
   isPositive?: boolean
 }
 
@@ -21,7 +19,7 @@ function App() {
       flexDirection: 'column', 
       alignItems: 'center', 
       justifyContent: 'center', 
-      minHeight: '100%', 
+      minHeight: '100vh', 
       width: '100%', 
       gap: '40px', 
       padding: '20px',
@@ -35,6 +33,7 @@ function App() {
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
+        maxWidth: '1200px',
         gap: '24px',
         justifyContent: 'center'
       }}>
