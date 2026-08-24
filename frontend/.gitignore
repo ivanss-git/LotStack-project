@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# SSL Certificates and Keys
+frontend/localhost+1-key.pem
+frontend/localhost+1.pem
