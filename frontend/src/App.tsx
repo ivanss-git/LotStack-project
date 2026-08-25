@@ -31,7 +31,7 @@ interface Vehicle {
   soldPrice: number | null;
   expenses: Expense[];
 
-  status: 'Sold' | 'Under Repair' | 'Not Sold' | 'Presold';
+  status: 'Sold' | 'Under Repair' | 'Available' | 'Presold';
 
   lotNumber: string;
   originalListingUrl: string;
@@ -124,7 +124,7 @@ const vehicles: Vehicle[] = [
     id: 5, year: 2009, make: 'Honda', model: 'Civic', trim: 'GX',
     vin: '1HGFA46559L001210', mileage: null,
     thumbnailUrl: '/images/sedans/2009-civic-gx.jpeg', imageUrls: ['/images/sedans/2009-civic-gx.jpeg'],
-    purchasePrice: 3700, soldPrice: null, status: 'Not Sold',
+    purchasePrice: 3700, soldPrice: null, status: 'Available',
     expenses: [
       { id: 501, description: 'Battery', category: 'REPAIR', amount: 160 },
       { id: 502, description: 'Hubcaps', category: 'REPAIR', amount: 60 },
@@ -161,7 +161,7 @@ const vehicles: Vehicle[] = [
   {
     id: 8, year: 2015, make: 'Chevrolet', model: 'Equinox', trim: 'LT',
     vin: '1GNALBEK9FZ119453', mileage: null,
-    thumbnailUrl: '/images/car-icon.jpg', imageUrls: ['/images/car-icon.jpg'],
+    thumbnailUrl: '/images/suvs/2015-chevy-equinox.jpeg', imageUrls: ['/images/suvs/2015-chevy-equinox.jpeg'],
     purchasePrice: 325, soldPrice: 800, status: 'Sold',
     expenses: [{ id: 801, description: 'Pickup/transport', category: 'TRANSPORT', amount: 150 }],
     lotNumber: 'N/A', originalListingUrl: 'https://bidmotors.bg/en/chevrolet-equinox-lt-2015-1gnalbek9fz119453',
@@ -252,6 +252,17 @@ function handleImageError(
   event.currentTarget.src = '/images/car-icon.jpg';
 }
 
+function getStatusStyle(status: Vehicle['status']) {
+  const colors = {
+    Sold: { backgroundColor: '#dcfce7', color: '#166534' },
+    Presold: { backgroundColor: '#fef3c7', color: '#92400e' },
+    'Under Repair': { backgroundColor: '#ffedd5', color: '#9a3412' },
+    Available: { backgroundColor: '#fee2e2', color: '#b91c1c' },
+  };
+
+  return colors[status];
+}
+
 function MetricCard({
   title,
   value,
@@ -315,7 +326,7 @@ function VehicleTable({
           <option value="all">All Vehicles</option>
           <option value="sold">Sold</option>
           <option value="under-repair">Under Repair</option>
-          <option value="not-sold">Not Sold</option>
+          <option value="available">Available</option>
           <option value="presold">Presold</option>
         </select>
 
@@ -385,7 +396,12 @@ function VehicleTable({
                   </td>
 
                   <td>
-                    <span className="status-badge">{vehicle.status}</span>
+                    <span
+                      className="status-badge"
+                      style={getStatusStyle(vehicle.status)}
+                    >
+                      {vehicle.status}
+                    </span>
                   </td>
 
                   <td>
@@ -426,7 +442,12 @@ function VehicleDetails({
       </button>
 
       <div className="details-heading">
-        <span className="status-badge">{vehicle.status}</span>
+        <span
+          className="status-badge"
+          style={getStatusStyle(vehicle.status)}
+        >
+          {vehicle.status}
+        </span>
 
         <h2>
           {vehicle.year} {vehicle.make} {vehicle.model}
