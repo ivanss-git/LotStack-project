@@ -23,6 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# SSL Certificates and Keys
-frontend/localhost+1-key.pem
-frontend/localhost+1.pem
+# Local HTTPS certificates
+/localhost+1-key.pem
+/localhost+1.pem
