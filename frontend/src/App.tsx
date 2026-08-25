@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import './App.css';
 
+type Page = 'dashboard' | 'about';
+type StatusFilter = 'all' | Vehicle['status'];
+type SortOption = 'newest' | 'highest-roi' | 'highest-profit';
+
 type ExpenseCategory =
   | 'REPAIR'
   | 'TRANSPORT'
@@ -75,9 +79,7 @@ const vehicles: Vehicle[] = [
     purchasePrice: 14800, soldPrice: null, status: 'Under Repair',
     expenses: [
       { id: 201, description: 'Front-end suspension kit', category: 'REPAIR', amount: 750 },
-      { id: 202, description: 'Labor', category: 'REPAIR', amount: 300 },
       { id: 203, description: 'Alignment', category: 'REPAIR', amount: 100 },
-      { id: 204, description: 'Cleaning', category: 'REPAIR', amount: 180 },
       { id: 205, description: 'Battery', category: 'REPAIR', amount: 280 },
       { id: 206, description: 'Virtual bid fee', category: 'AUCTION_FEE', amount: 149 },
       { id: 207, description: 'Gate fee', category: 'AUCTION_FEE', amount: 79 },
@@ -96,9 +98,7 @@ const vehicles: Vehicle[] = [
     purchasePrice: 12500, soldPrice: 22000, status: 'Sold',
     expenses: [
       { id: 301, description: 'Front-end suspension kit', category: 'REPAIR', amount: 700 },
-      { id: 302, description: 'Labor', category: 'REPAIR', amount: 325 },
       { id: 303, description: 'Alignment', category: 'REPAIR', amount: 100 },
-      { id: 304, description: 'Cleaning', category: 'REPAIR', amount: 180 },
       { id: 305, description: 'Optima YellowTop 94R/H7 battery', category: 'REPAIR', amount: 379.99 },
       { id: 306, description: 'Steering-wheel airbag', category: 'REPAIR', amount: 1205.91 },
       { id: 307, description: 'Environmental fee', category: 'AUCTION_FEE', amount: 15 },
@@ -110,13 +110,13 @@ const vehicles: Vehicle[] = [
       { id: 313, description: 'Additional auction fees', category: 'AUCTION_FEE', amount: 1070 },
     ],
     lotNumber: 'N/A', originalListingUrl: '',
-    notes: 'VIN pending verification. The listed fees total $2,796. Repair total corrected to $2,890.90.',
+    notes: 'VIN pending verification. The listed fees total $2,796. Repair total: $2,385.90.',
   },
   {
     id: 4, year: 1997, make: 'Chevrolet', model: 'C1500', trim: 'Base',
     vin: 'Pending verification', mileage: null,
     thumbnailUrl: '/images/pickups/1997-chevrolet-c1500.jpeg', imageUrls: ['/images/pickups/1997-chevrolet-c1500.jpeg'],
-    purchasePrice: 1500, soldPrice: 4500, status: 'Sold',
+    purchasePrice: 1500, soldPrice: 6700, status: 'Sold',
     expenses: [{ id: 401, description: 'Repairs', category: 'REPAIR', amount: 1525 }],
     lotNumber: 'N/A', originalListingUrl: '',
   },
@@ -128,7 +128,6 @@ const vehicles: Vehicle[] = [
     expenses: [
       { id: 501, description: 'Battery', category: 'REPAIR', amount: 160 },
       { id: 502, description: 'Hubcaps', category: 'REPAIR', amount: 60 },
-      { id: 503, description: 'Interior/exterior detail', category: 'REPAIR', amount: 150 },
       { id: 504, description: 'Buyer fee', category: 'AUCTION_FEE', amount: 300 },
     ],
     lotNumber: '229091', originalListingUrl: 'https://www.lso.cc/auction/7729/item/2009-honda-civic-gx-cng-229091/',
@@ -137,7 +136,7 @@ const vehicles: Vehicle[] = [
     id: 6, year: 2017, make: 'Volkswagen', model: 'Jetta', trim: 'S',
     vin: '3VW2B7AJ3HM250759', mileage: null,
     thumbnailUrl: '/images/car-icon.jpg', imageUrls: ['/images/car-icon.jpg'],
-    purchasePrice: 4800, soldPrice: 6500, status: 'Sold', expenses: [],
+    purchasePrice: 4800, soldPrice: 7500, status: 'Sold', expenses: [],
     lotNumber: 'N/A', originalListingUrl: '', notes: 'White vehicle; quick flip with no repairs or fees.',
   },
   {
@@ -171,7 +170,7 @@ const vehicles: Vehicle[] = [
     id: 9, year: 2007, make: 'CM', model: '12', trim: 'N/A',
     vin: '5VNBU16257T056045', mileage: null,
     thumbnailUrl: '/images/car-icon.jpg', imageUrls: ['/images/car-icon.jpg'],
-    purchasePrice: 1500, soldPrice: 4000, status: 'Sold',
+    purchasePrice: 1500, soldPrice: 5300, status: 'Sold',
     expenses: [
       { id: 901, description: 'Full axle leaf springs', category: 'REPAIR', amount: 400 },
       { id: 902, description: 'Tires', category: 'REPAIR', amount: 300 },
@@ -185,12 +184,11 @@ const vehicles: Vehicle[] = [
     thumbnailUrl: '/images/pickups/2015-silverado-red.jpeg', imageUrls: ['/images/pickups/2015-silverado-red.jpeg'],
     purchasePrice: 7500, soldPrice: 16500, status: 'Presold',
     expenses: [
-      { id: 1001, description: 'Door', category: 'REPAIR', amount: 600 },
-      { id: 1002, description: 'Bed', category: 'REPAIR', amount: 720 },
-      { id: 1003, description: 'Bed and door paint', category: 'REPAIR', amount: 800 },
+      { id: 1001, description: 'Door', category: 'REPAIR', amount: 535 },
+      { id: 1002, description: 'Bed', category: 'REPAIR', amount: 700 },
+      { id: 1003, description: 'Bed and door paint', category: 'REPAIR', amount: 540 },
       { id: 1004, description: 'Starter', category: 'REPAIR', amount: 120 },
       { id: 1005, description: 'Cabin work', category: 'REPAIR', amount: 800 },
-      { id: 1006, description: 'Cleaning', category: 'REPAIR', amount: 200 },
       { id: 1007, description: 'Tow', category: 'TRANSPORT', amount: 300 },
     ],
     lotNumber: 'N/A', originalListingUrl: '',
@@ -279,7 +277,12 @@ function MetricCard({
   );
 }
 
-function Sidebar() {
+interface SidebarProps {
+  activePage: Page;
+  onNavigate: (page: Page) => void;
+}
+
+function Sidebar({ activePage, onNavigate }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="logo">
@@ -288,17 +291,15 @@ function Sidebar() {
       </div>
 
       <nav className="sidebar-navigation">
-        <button className="navigation-button active">
-          Dashboard
-        </button>
-
-        <button className="navigation-button">
-          Vehicles
-        </button>
-
-        <button className="navigation-button">
-          About
-        </button>
+        {(['dashboard', 'about'] as Page[]).map((page) => (
+          <button
+            key={page}
+            className={`navigation-button ${activePage === page ? 'active' : ''}`}
+            onClick={() => onNavigate(page)}
+          >
+            {page[0].toUpperCase() + page.slice(1)}
+          </button>
+        ))}
       </nav>
     </aside>
   );
@@ -313,6 +314,35 @@ function VehicleTable({
   vehicles,
   onSelect,
 }: VehicleTableProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [sortOption, setSortOption] = useState<SortOption>('newest');
+
+  const displayedVehicles = vehicles
+    .filter((vehicle) => {
+      const query = searchQuery.trim().toLowerCase();
+      const matchesSearch =
+        query === '' ||
+        `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} ${vehicle.vin}`
+          .toLowerCase()
+          .includes(query);
+      const matchesStatus =
+        statusFilter === 'all' || vehicle.status === statusFilter;
+
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      if (sortOption === 'highest-profit') {
+        return calculateProfit(b) - calculateProfit(a);
+      }
+
+      if (sortOption === 'highest-roi') {
+        return (calculateRoi(b) ?? -Infinity) - (calculateRoi(a) ?? -Infinity);
+      }
+
+      return b.year - a.year || b.id - a.id;
+    });
+
   return (
     <section className="table-card">
       <div className="table-toolbar">
@@ -320,17 +350,25 @@ function VehicleTable({
           type="search"
           placeholder="Search vehicles..."
           aria-label="Search vehicles"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
         />
 
-        <select defaultValue="all">
+        <select
+          value={statusFilter}
+          onChange={(event) => setStatusFilter(event.target.value as StatusFilter)}
+        >
           <option value="all">All Vehicles</option>
-          <option value="sold">Sold</option>
-          <option value="under-repair">Under Repair</option>
-          <option value="available">Available</option>
-          <option value="presold">Presold</option>
+          <option value="Sold">Sold</option>
+          <option value="Under Repair">Under Repair</option>
+          <option value="Available">Available</option>
+          <option value="Presold">Presold</option>
         </select>
 
-        <select defaultValue="newest">
+        <select
+          value={sortOption}
+          onChange={(event) => setSortOption(event.target.value as SortOption)}
+        >
           <option value="newest">Newest First</option>
           <option value="highest-roi">Highest ROI</option>
           <option value="highest-profit">Highest Profit</option>
@@ -354,7 +392,7 @@ function VehicleTable({
           </thead>
 
           <tbody>
-            {vehicles.map((vehicle) => {
+            {displayedVehicles.map((vehicle) => {
               const repairCost = calculateRepairCost(vehicle);
               const totalInvested =
                 calculateTotalInvested(vehicle);
@@ -415,6 +453,12 @@ function VehicleTable({
                 </tr>
               );
             })}
+
+            {displayedVehicles.length === 0 && (
+              <tr>
+                <td colSpan={9}>No vehicles match your search.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -552,7 +596,36 @@ function VehicleDetails({
   );
 }
 
+function About() {
+  return (
+    <section className="details-card">
+      <h2>About LotStack</h2>
+
+      <p>
+        LotStack displays the purchases, expenses, and outcomes of vehicles
+        found through the LotStack auction analyzer.
+      </p>
+
+      <p>
+        It is a personal full-stack project inspired by firsthand experience
+        buying, repairing, and selling auction vehicles. The project combines
+        real transaction results with software designed to evaluate auction
+        opportunities.
+      </p>
+
+      <div className="notes-section">
+        <h3>How results are calculated</h3>
+        <p>
+          Net profit equals the final sale price minus the purchase price and
+          all recorded expenses. ROI equals net profit divided by total invested.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function App() {
+  const [activePage, setActivePage] = useState<Page>('dashboard');
   const [selectedVehicle, setSelectedVehicle] =
     useState<Vehicle | null>(null);
 
@@ -591,7 +664,7 @@ function App() {
       value: formatCurrency(totalCapitalInvested),
     },
     {
-      title: 'Total Gross Profit',
+      title: 'Total Net Profit',
       value: formatCurrency(totalProfit),
       isPositive: totalProfit >= 0,
     },
@@ -608,18 +681,26 @@ function App() {
 
   return (
     <div className="app-layout">
-      <Sidebar />
+      <Sidebar
+        activePage={activePage}
+        onNavigate={(page) => {
+          setActivePage(page);
+          setSelectedVehicle(null);
+        }}
+      />
 
       <main className="main-content">
         <header className="page-header">
           <h1>
             {selectedVehicle
               ? 'Vehicle Details'
-              : 'Vehicle Portfolio'}
+              : activePage === 'about'
+                ? 'About LotStack'
+                : 'Vehicle Portfolio'}
           </h1>
         </header>
 
-        {!selectedVehicle && (
+        {activePage === 'dashboard' && !selectedVehicle && (
           <section className="metrics-grid">
             {metrics.map((metric) => (
               <MetricCard
@@ -630,7 +711,9 @@ function App() {
           </section>
         )}
 
-        {selectedVehicle ? (
+        {activePage === 'about' ? (
+          <About />
+        ) : selectedVehicle ? (
           <VehicleDetails
             vehicle={selectedVehicle}
             onClose={() => setSelectedVehicle(null)}
