@@ -1,8 +1,15 @@
-import { useState } from 'react';
+import {
+  useState,
+  type ReactNode,
+  type SyntheticEvent,
+} from 'react';
 import './App.css';
 
+/* ---------- Types ---------- */
+
 type Page = 'dashboard' | 'about';
-type StatusFilter = 'all' | Vehicle['status'];
+type VehicleStatus = 'Sold' | 'Under Repair' | 'Available' | 'Presold';
+type StatusFilter = 'all' | VehicleStatus;
 type SortOption = 'newest' | 'highest-roi' | 'highest-profit';
 
 type ExpenseCategory =
@@ -35,7 +42,7 @@ interface Vehicle {
   soldPrice: number | null;
   expenses: Expense[];
 
-  status: 'Sold' | 'Under Repair' | 'Available' | 'Presold';
+  status: VehicleStatus;
 
   lotNumber: string;
   originalListingUrl: string;
@@ -47,6 +54,22 @@ interface MetricCardProps {
   value: string;
   isPositive?: boolean;
 }
+
+/* ---------- Fixed display values ---------- */
+
+const PAGES: Page[] = ['dashboard', 'about'];
+
+const STATUS_STYLES: Record<
+  VehicleStatus,
+  { backgroundColor: string; color: string }
+> = {
+  Sold: { backgroundColor: '#dcfce7', color: '#166534' },
+  Presold: { backgroundColor: '#fef3c7', color: '#92400e' },
+  'Under Repair': { backgroundColor: '#ffedd5', color: '#9a3412' },
+  Available: { backgroundColor: '#fee2e2', color: '#b91c1c' },
+};
+
+/* ---------- Vehicle portfolio data ---------- */
 
 const vehicles: Vehicle[] = [
   {
@@ -196,6 +219,8 @@ const vehicles: Vehicle[] = [
   },
 ];
 
+/* ---------- Calculations and formatting ---------- */
+
 function calculateRepairCost(vehicle: Vehicle): number {
   return vehicle.expenses
     .filter((expense) => expense.category === 'REPAIR')
@@ -214,17 +239,16 @@ function calculateTotalInvested(vehicle: Vehicle): number {
 }
 
 function calculateProfit(vehicle: Vehicle): number {
-  if (vehicle.soldPrice === null) return 0;
-  return vehicle.soldPrice - calculateTotalInvested(vehicle);
+  return vehicle.soldPrice === null
+    ? 0
+    : vehicle.soldPrice - calculateTotalInvested(vehicle);
 }
 
 function calculateRoi(vehicle: Vehicle): number | null {
   if (vehicle.soldPrice === null) return null;
   const totalInvested = calculateTotalInvested(vehicle);
 
-  if (totalInvested === 0) {
-    return null;
-  }
+  if (totalInvested === 0) return null;
 
   return (calculateProfit(vehicle) / totalInvested) * 100;
 }
@@ -243,29 +267,33 @@ function formatSalePrice(vehicle: Vehicle): string {
     : formatCurrency(vehicle.soldPrice);
 }
 
-function handleImageError(
-  event: React.SyntheticEvent<HTMLImageElement>
-) {
+function formatMileage(mileage: number | null): string {
+  return mileage === null
+    ? 'Pending verification'
+    : `${mileage.toLocaleString()} miles`;
+}
+
+function getValueClass(value: number | null): string {
+  if (value === null) return '';
+  return value >= 0 ? 'positive' : 'negative';
+}
+
+function handleImageError(event: SyntheticEvent<HTMLImageElement>) {
   event.currentTarget.onerror = null;
   event.currentTarget.src = '/images/car-icon.jpg';
 }
 
-function getStatusStyle(status: Vehicle['status']) {
-  const colors = {
-    Sold: { backgroundColor: '#dcfce7', color: '#166534' },
-    Presold: { backgroundColor: '#fef3c7', color: '#92400e' },
-    'Under Repair': { backgroundColor: '#ffedd5', color: '#9a3412' },
-    Available: { backgroundColor: '#fee2e2', color: '#b91c1c' },
-  };
-
-  return colors[status];
+function getStatusStyle(status: VehicleStatus) {
+  return STATUS_STYLES[status];
 }
+
+/* ---------- Reusable UI components ---------- */
 
 function MetricCard({
   title,
   value,
   isPositive = false,
-}: MetricCardProps) {
+}: Readonly<MetricCardProps>) {
   return (
     <article className="metric-card">
       <span>{title}</span>
@@ -282,7 +310,10 @@ interface SidebarProps {
   onNavigate: (page: Page) => void;
 }
 
-function Sidebar({ activePage, onNavigate }: SidebarProps) {
+function Sidebar({
+  activePage,
+  onNavigate,
+}: Readonly<SidebarProps>) {
   return (
     <aside className="sidebar">
       <div className="logo">
@@ -291,9 +322,10 @@ function Sidebar({ activePage, onNavigate }: SidebarProps) {
       </div>
 
       <nav className="sidebar-navigation">
-        {(['dashboard', 'about'] as Page[]).map((page) => (
+        {PAGES.map((page) => (
           <button
             key={page}
+            type="button"
             className={`navigation-button ${activePage === page ? 'active' : ''}`}
             onClick={() => onNavigate(page)}
           >
@@ -313,7 +345,7 @@ interface VehicleTableProps {
 function VehicleTable({
   vehicles,
   onSelect,
-}: VehicleTableProps) {
+}: Readonly<VehicleTableProps>) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [sortOption, setSortOption] = useState<SortOption>('newest');
@@ -425,11 +457,11 @@ function VehicleTable({
                   <td>{formatCurrency(totalInvested)}</td>
                   <td>{formatSalePrice(vehicle)}</td>
 
-                  <td className={hasSalePrice ? (profit >= 0 ? 'positive' : 'negative') : ''}>
+                  <td className={getValueClass(hasSalePrice ? profit : null)}>
                     {hasSalePrice ? formatCurrency(profit) : 'Pending'}
                   </td>
 
-                  <td className={roi === null ? '' : (roi >= 0 ? 'positive' : 'negative')}>
+                  <td className={getValueClass(roi)}>
                     {roi === null ? 'Pending' : `${roi.toFixed(1)}%`}
                   </td>
 
@@ -444,6 +476,7 @@ function VehicleTable({
 
                   <td>
                     <button
+                      type="button"
                       className="details-button"
                       onClick={() => onSelect(vehicle)}
                     >
@@ -474,14 +507,14 @@ interface VehicleDetailsProps {
 function VehicleDetails({
   vehicle,
   onClose,
-}: VehicleDetailsProps) {
+}: Readonly<VehicleDetailsProps>) {
   const totalInvested = calculateTotalInvested(vehicle);
   const profit = calculateProfit(vehicle);
   const roi = calculateRoi(vehicle);
 
   return (
     <section className="details-card">
-      <button className="back-button" onClick={onClose}>
+      <button type="button" className="back-button" onClick={onClose}>
         ← Back to vehicles
       </button>
 
@@ -497,7 +530,11 @@ function VehicleDetails({
           {vehicle.year} {vehicle.make} {vehicle.model}
         </h2>
 
-        <p>{vehicle.trim} · {vehicle.mileage === null ? 'Mileage pending' : `${vehicle.mileage.toLocaleString()} miles`}</p>
+        <p>
+          {vehicle.trim} · {vehicle.mileage === null
+            ? 'Mileage pending'
+            : formatMileage(vehicle.mileage)}
+        </p>
       </div>
 
       <div className="details-images">
@@ -519,11 +556,7 @@ function VehicleDetails({
 
         <div>
           <span>Mileage</span>
-          <strong>
-            {vehicle.mileage === null
-              ? 'Pending verification'
-              : `${vehicle.mileage.toLocaleString()} miles`}
-          </strong>
+          <strong>{formatMileage(vehicle.mileage)}</strong>
         </div>
 
         <div>
@@ -543,14 +576,14 @@ function VehicleDetails({
 
         <div>
           <span>Final Profit</span>
-          <strong className={vehicle.soldPrice === null ? '' : (profit >= 0 ? 'positive' : 'negative')}>
+          <strong className={getValueClass(vehicle.soldPrice === null ? null : profit)}>
             {vehicle.soldPrice === null ? 'Pending' : formatCurrency(profit)}
           </strong>
         </div>
 
         <div>
           <span>ROI</span>
-          <strong className={roi === null ? '' : (roi >= 0 ? 'positive' : 'negative')}>
+          <strong className={getValueClass(roi)}>
             {roi === null ? 'Pending' : `${roi.toFixed(1)}%`}
           </strong>
         </div>
@@ -624,6 +657,8 @@ function About() {
   );
 }
 
+/* ---------- Main application ---------- */
+
 function App() {
   const [activePage, setActivePage] = useState<Page>('dashboard');
   const [selectedVehicle, setSelectedVehicle] =
@@ -679,6 +714,30 @@ function App() {
     },
   ];
 
+  // Choose the heading and content without nested ternaries.
+  let pageTitle = 'Vehicle Portfolio';
+  let pageContent: ReactNode;
+
+  if (activePage === 'about') {
+    pageTitle = 'About LotStack';
+    pageContent = <About />;
+  } else if (selectedVehicle) {
+    pageTitle = 'Vehicle Details';
+    pageContent = (
+      <VehicleDetails
+        vehicle={selectedVehicle}
+        onClose={() => setSelectedVehicle(null)}
+      />
+    );
+  } else {
+    pageContent = (
+      <VehicleTable
+        vehicles={vehicles}
+        onSelect={setSelectedVehicle}
+      />
+    );
+  }
+
   return (
     <div className="app-layout">
       <Sidebar
@@ -691,13 +750,7 @@ function App() {
 
       <main className="main-content">
         <header className="page-header">
-          <h1>
-            {selectedVehicle
-              ? 'Vehicle Details'
-              : activePage === 'about'
-                ? 'About LotStack'
-                : 'Vehicle Portfolio'}
-          </h1>
+          <h1>{pageTitle}</h1>
         </header>
 
         {activePage === 'dashboard' && !selectedVehicle && (
@@ -711,19 +764,7 @@ function App() {
           </section>
         )}
 
-        {activePage === 'about' ? (
-          <About />
-        ) : selectedVehicle ? (
-          <VehicleDetails
-            vehicle={selectedVehicle}
-            onClose={() => setSelectedVehicle(null)}
-          />
-        ) : (
-          <VehicleTable
-            vehicles={vehicles}
-            onSelect={setSelectedVehicle}
-          />
-        )}
+        {pageContent}
       </main>
     </div>
   );
