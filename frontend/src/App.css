@@ -1,3 +1,4 @@
+/* Global defaults */
 * {
   box-sizing: border-box;
 }
@@ -25,6 +26,7 @@ button {
   cursor: pointer;
 }
 
+/* Main page layout */
 .app-layout {
   display: grid;
   grid-template-columns: 230px minmax(0, 1fr);
@@ -33,6 +35,7 @@ button {
   background: #f8fafc;
 }
 
+/* Sidebar */
 .sidebar {
   padding: 28px 14px;
   color: #ffffff;
@@ -74,6 +77,7 @@ button {
   background: #164979;
 }
 
+/* Main content */
 .main-content {
   min-width: 0;
   padding: 28px 40px;
@@ -89,6 +93,7 @@ button {
   font-size: 30px;
 }
 
+/* Summary cards */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(170px, 1fr));
@@ -117,18 +122,26 @@ button {
   font-size: 28px;
 }
 
+.positive,
 .metric-card strong.positive {
   color: #15803d;
 }
 
+.negative {
+  color: #dc2626;
+}
+
+/* Table and vehicle details containers */
 .table-card,
 .details-card {
+  color: #0f172a;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   box-shadow: 0 2px 5px rgb(15 23 42 / 5%);
 }
 
+/* Search and filter controls */
 .table-toolbar {
   display: flex;
   gap: 14px;
@@ -150,6 +163,7 @@ button {
   width: 280px;
 }
 
+/* Vehicle table */
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
@@ -209,14 +223,6 @@ tbody tr:hover {
   color: #475569;
 }
 
-.positive {
-  color: #15803d;
-}
-
-.negative {
-  color: #dc2626;
-}
-
 .status-badge {
   display: inline-block;
   padding: 5px 10px;
@@ -241,13 +247,14 @@ tbody tr:hover {
   background: #075aca;
 }
 
+/* Vehicle details */
 .details-card {
   padding: 25px;
 }
 
 .back-button {
   padding: 0;
-  color: #075aca;
+  color: #2563eb;
   background: transparent;
   border: 0;
 }
@@ -257,7 +264,8 @@ tbody tr:hover {
 }
 
 .details-heading h2 {
-  margin: 12px 0 6px;
+  margin: 18px 0 8px;
+  color: #0f172a;
 }
 
 .details-heading p {
@@ -265,21 +273,27 @@ tbody tr:hover {
   color: #64748b;
 }
 
+/* Full vehicle image */
 .details-images {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 28px 0;
 }
 
 .details-images img {
+  display: block;
   width: 100%;
-  height: 210px;
-  object-fit: cover;
-  background: #e2e8f0;
-  border-radius: 9px;
+  max-width: 900px;
+  height: auto;
+  max-height: 650px;
+  object-fit: contain;
+  object-position: center;
+  background: #f8fafc;
+  border-radius: 12px;
 }
 
+/* Vehicle information grid */
 .details-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -306,7 +320,16 @@ tbody tr:hover {
 }
 
 .details-grid strong {
+  color: #1e293b;
   overflow-wrap: anywhere;
+}
+
+.details-grid strong.positive {
+  color: #15803d;
+}
+
+.details-grid strong.negative {
+  color: #dc2626;
 }
 
 .details-link {
@@ -319,27 +342,54 @@ tbody tr:hover {
   text-decoration: underline;
 }
 
+/* Repair expenses and notes */
 .expense-section,
 .notes-section {
   margin-top: 24px;
 }
 
+.expense-section h3,
+.notes-section h3 {
+  color: #0f172a;
+}
+
 .expense-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 24px;
   padding: 13px 0;
   border-bottom: 1px solid #e2e8f0;
 }
 
-.expense-row div {
-  display: grid;
+.expense-row > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 4px;
+  min-width: 0;
 }
 
-.expense-row span {
+.expense-row > div strong {
+  margin: 0;
+  color: #1e293b;
+  text-align: left;
+}
+
+.expense-row > div span {
+  display: block;
+  margin: 6px 0 0;
+  padding: 0;
   color: #64748b;
   font-size: 11px;
+  text-align: left;
+}
+
+.expense-row > strong {
+  justify-self: end;
+  color: #1e293b;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .notes-section p {
@@ -347,16 +397,15 @@ tbody tr:hover {
   line-height: 1.6;
 }
 
+/* Tablet layout */
 @media (max-width: 1050px) {
-  .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+  .metrics-grid,
   .details-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* Mobile layout */
 @media (max-width: 720px) {
   .app-layout {
     grid-template-columns: 1fr;
@@ -371,8 +420,7 @@ tbody tr:hover {
   }
 
   .metrics-grid,
-  .details-grid,
-  .details-images {
+  .details-grid {
     grid-template-columns: 1fr;
   }
 
@@ -383,72 +431,4 @@ tbody tr:hover {
   .table-toolbar input {
     width: 100%;
   }
-}
-
-/* Vehicle details readability */
-.details-card {
-  color: #0f172a;
-}
-
-.details-heading h2 {
-  margin: 18px 0 8px;
-  color: #0f172a;
-  opacity: 1;
-}
-
-.details-heading p {
-  color: #64748b;
-}
-
-.details-grid span {
-  color: #64748b;
-}
-
-.details-grid strong {
-  color: #1e293b;
-}
-
-.details-grid strong.positive {
-  color: #15803d;
-}
-
-.details-grid strong.negative {
-  color: #dc2626;
-}
-
-.expense-section h3,
-.notes-section h3 {
-  color: #0f172a;
-}
-
-.expense-row strong {
-  color: #1e293b;
-}
-
-.expense-row span {
-  color: #64748b;
-}
-
-.back-button {
-  color: #2563eb;
-}
-
-/* Show the complete vehicle image */
-.details-images {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin: 28px 0;
-}
-
-.details-images img {
-  display: block;
-  width: 100%;
-  max-width: 900px;
-  height: auto;
-  max-height: 650px;
-  object-fit: contain;
-  object-position: center;
-  background: #f8fafc;
-  border-radius: 12px;
 }
