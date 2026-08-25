@@ -92,7 +92,7 @@ const vehicles: Vehicle[] = [
       { id: 110, description: 'Buyer fee', category: 'AUCTION_FEE', amount: 1275 },
       { id: 111, description: 'Sales tax', category: 'PAPERWORK', amount: 125.85 },
     ],
-    lotNumber: 'N/A', originalListingUrl: 'https://bidmotors.bg/en/gmc-sierra-k3500-2018-1gd42vcy3jf249235',
+    lotNumber: '58134945', originalListingUrl: 'https://bidmotors.bg/en/gmc-sierra-k3500-2018-1gd42vcy3jf249235',
     notes: 'Replacement panels matched the vehicle color, so paint was not needed.',
   },
   {
@@ -140,7 +140,11 @@ const vehicles: Vehicle[] = [
     vin: 'Pending verification', mileage: null,
     thumbnailUrl: '/images/pickups/1997-chevrolet-c1500.jpeg', imageUrls: ['/images/pickups/1997-chevrolet-c1500.jpeg'],
     purchasePrice: 1500, soldPrice: 6700, status: 'Sold',
-    expenses: [{ id: 401, description: 'Repairs', category: 'REPAIR', amount: 1525 }],
+    expenses: [
+      { id: 401, description: 'Engine Rebuild', category: 'REPAIR', amount: 1800 },
+      { id: 402, description: 'Transmission Rebuild', category: 'REPAIR', amount: 750 },
+      { id: 403, description: "Paint Job - Labor was free", category: 'REPAIR', amount: 250}
+    ],
     lotNumber: 'N/A', originalListingUrl: '',
   },
   {
@@ -153,7 +157,7 @@ const vehicles: Vehicle[] = [
       { id: 502, description: 'Hubcaps', category: 'REPAIR', amount: 60 },
       { id: 504, description: 'Buyer fee', category: 'AUCTION_FEE', amount: 300 },
     ],
-    lotNumber: '229091', originalListingUrl: 'https://www.lso.cc/auction/7729/item/2009-honda-civic-gx-cng-229091/',
+    lotNumber: '902-EQP-94019', originalListingUrl: 'https://www.lso.cc/auction/7729/item/2009-honda-civic-gx-cng-229091/',
   },
   {
     id: 6, year: 2017, make: 'Volkswagen', model: 'Jetta', trim: 'S',
@@ -204,8 +208,8 @@ const vehicles: Vehicle[] = [
   {
     id: 10, year: 2015, make: 'Chevrolet', model: 'Silverado', trim: 'LT',
     vin: '1GCRCREC3FZ306989', mileage: null,
-    thumbnailUrl: '/images/pickups/2015-silverado-red.jpeg', imageUrls: ['/images/pickups/2015-silverado-red.jpeg'],
-    purchasePrice: 7500, soldPrice: 16500, status: 'Presold',
+    thumbnailUrl: '/images/pickups/2015-chevrolet-silverado-red.jpeg', imageUrls: ['/images/pickups/2015-silverado-red.jpeg'],
+    purchasePrice: 7500, soldPrice: 16500, status: 'Sold',
     expenses: [
       { id: 1001, description: 'Door', category: 'REPAIR', amount: 535 },
       { id: 1002, description: 'Bed', category: 'REPAIR', amount: 700 },
@@ -215,7 +219,28 @@ const vehicles: Vehicle[] = [
       { id: 1007, description: 'Tow', category: 'TRANSPORT', amount: 300 },
     ],
     lotNumber: 'N/A', originalListingUrl: '',
-    notes: 'Red vehicle. Presold for $16,500 to the same client who purchased the Sierra 3500HD; cosmetic repairs remain.',
+    notes: 'Sold for $16,500 to the same client who purchased the Sierra 3500HD.',
+  },
+  {
+    id: 11, year: 2017, make: 'Chevrolet', model: 'Silverado', trim: 'LS',
+    vin: '3GCPCNECXHG331651', mileage: 75345,
+    thumbnailUrl: '/images/pickups/2017-chevrolet-silverado-white.jpeg', imageUrls: ['/images/pickups/2017-chevrolet-silverado-white.jpeg'],
+    purchasePrice: 3000, soldPrice: null, status: 'Under Repair',
+    expenses: [
+      { id: 1101, description: 'Door - Driver', category: 'REPAIR', amount: 400 },
+      { id: 1102, description: 'Door - Driver (rear)', category: 'REPAIR', amount: 400 },
+      { id: 1103, description: 'Front Bumper Assembly', category: 'REPAIR', amount: 320 },
+      { id: 1104, description: 'Front Fenders', category: 'REPAIR', amount: 400 },
+      { id: 1105, description: 'Radiator and Core Support', category: 'REPAIR', amount: 250 },
+      { id: 1106, description: 'Hood', category: 'REPAIR', amount: 300 },
+      { id: 1107, description: 'Side Rear View Mirrors Pair', category: 'REPAIR', amount: 300 },
+      { id: 1108, description: 'Rebuilt Engine', category: 'REPAIR', amount: 2900 },
+      { id: 1109, description: 'Cargo Light Assembly', category: 'REPAIR', amount: 30},
+      { id: 1110, description: 'Airbag and Module Reset', category: 'REPAIR', amount: 450 },
+    ],
+    lotNumber: '57716085', originalListingUrl: 'https://bidmotors.bg/en/chevrolet-all-models-c1500-2017-3gcpcnecxhg331651',
+    notes: 'Currently undergoing further repairs.'
+  
   },
 ];
 
