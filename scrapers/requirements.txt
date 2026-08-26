@@ -1,0 +1,15 @@
+To implement our scrapers, we must first consider the context of our data collection and which would be most useful for each. The options include:
+
+	Integrated Scrapers (Integration) - They are built directly inside other software, share resources with main, and are triggered automatically during workflows.
+
+	Browser extensions (By Interface) - Run directly within browser windows, rely on user interaction to start, inject code into the axtive tab and no independent installation/setup required. 
+
+	Enterprise Data Pipelines (By Architecture) - Extract/transform/load simultaneously and are connected directly to data
+
+	Cloud-Based Scrapers (By Deployment) - Run on vendors remote servers, managed through a web dashboard, and no local machine required. 
+
+	Standalone Scrapers - Independent web scraping application that runs on local machine or server without requiring integration to larger platform/software. They ingest a url or parameters, extract specific data, and output structured files like JSON.
+
+For my application, the most useful implementation is probably a standalone scraper, an API integration, or a integrated scraper.
+
+ 
