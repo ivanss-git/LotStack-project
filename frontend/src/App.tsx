@@ -208,7 +208,7 @@ const vehicles: Vehicle[] = [
   {
     id: 10, year: 2015, make: 'Chevrolet', model: 'Silverado', trim: 'LT',
     vin: '1GCRCREC3FZ306989', mileage: null,
-    thumbnailUrl: '/images/pickups/2015-chevrolet-silverado-red.jpeg', imageUrls: ['/images/pickups/2015-silverado-red.jpeg'],
+    thumbnailUrl: '/images/pickups/2015-chevrolet-silverado-red.jpeg', imageUrls: ['/images/pickups/2015-chevrolet-silverado-red.jpeg'],
     purchasePrice: 7500, soldPrice: 16500, status: 'Sold',
     expenses: [
       { id: 1001, description: 'Door', category: 'REPAIR', amount: 535 },
