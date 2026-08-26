@@ -689,18 +689,18 @@ function App() {
   const [selectedVehicle, setSelectedVehicle] =
     useState<Vehicle | null>(null);
 
-  const totalCapitalInvested = vehicles.reduce(
-    (total, vehicle) =>
-      total + calculateTotalInvested(vehicle),
-    0
-  );
-
   const soldVehicles = vehicles.filter(
     (vehicle) => vehicle.status === 'Sold' && vehicle.soldPrice !== null
   );
 
+  // Dashboard totals use sold vehicles so revenue - cost always equals profit.
   const totalRevenue = soldVehicles.reduce(
     (total, vehicle) => total + (vehicle.soldPrice ?? 0),
+    0
+  );
+
+  const totalCost = soldVehicles.reduce(
+    (total, vehicle) => total + calculateTotalInvested(vehicle),
     0
   );
 
@@ -720,8 +720,8 @@ function App() {
 
   const metrics: MetricCardProps[] = [
     {
-      title: 'Total Capital Invested',
-      value: formatCurrency(totalCapitalInvested),
+      title: 'Total Revenue',
+      value: formatCurrency(totalRevenue),
     },
     {
       title: 'Total Net Profit',
@@ -729,8 +729,8 @@ function App() {
       isPositive: totalProfit >= 0,
     },
     {
-      title: 'Total Revenue',
-      value: formatCurrency(totalRevenue),
+      title: 'Total Cost / Expenses',
+      value: formatCurrency(totalCost),
     },
     {
       title: 'Average ROI',
