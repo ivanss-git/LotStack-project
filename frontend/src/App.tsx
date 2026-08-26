@@ -98,7 +98,7 @@ const vehicles: Vehicle[] = [
   {
     id: 2, year: 2018, make: 'GMC', model: 'Sierra K1500', trim: 'Denali',
     vin: '3GTU2PEC8JG526641', mileage: null,
-    thumbnailUrl: '/images/pickups/2018-denali-black.jpeg', imageUrls: ['/images/pickups/2018-denali-black.jpeg'],
+    thumbnailUrl: '/images/pickups/2018-gmc-denali-black.jpeg', imageUrls: ['/images/pickups/2018-denali-black.jpeg'],
     purchasePrice: 14800, soldPrice: null, status: 'Under Repair',
     expenses: [
       { id: 201, description: 'Front-end suspension kit', category: 'REPAIR', amount: 750 },
