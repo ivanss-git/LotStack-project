@@ -1,42 +1,237 @@
+import html
+import re
+import time
+
 import requests
 
-item_id = "229091"
-auction_id = "7729"
+from scrapers import db_helper
 
-item_url = (
-    "https://www.lso.cc/auction/7729/"
-    "item/2009-honda-civic-gx-cng-229091/"
-)
 
-session = requests.Session()
+CATALOG_URL = "https://www.lso.cc/api/getitems"
+LSO_HOME_URL = "https://www.lso.cc/"
 
-session.headers.update({
-    "Accept": "application/json, text/plain, */*",
-    "User-Agent": "Mozilla/5.0",
-    "Origin": "https://www.lso.cc",
-    "Referer": item_url,
-})
+PER_PAGE = 24
+REQUEST_DELAY_SECONDS = 1
+MAX_PAGES = 100
 
-# Establish PHP session cookies
-session.get(item_url, timeout=20)
-session.cookies.set("ckchk", "1", domain="www.lso.cc")
 
-response = session.post(
-    "https://www.lso.cc/api/ItemData",
-    data={
-        "item_id": item_id,
-        "auction_id": auction_id,
-    },
-    timeout=20,
-)
+def clean_html(value):
+    """Remove HTML tags and decode HTML characters."""
+    value = html.unescape(value or "")
 
-print("Status:", response.status_code)
-print("Response:", response.text[:1000])
+    value = re.sub(
+        r"<br\s*/?>",
+        " ",
+        value,
+        flags=re.IGNORECASE,
+    )
 
-response.raise_for_status()
-item = response.json()
+    value = re.sub(r"<[^>]+>", " ", value)
 
-print(item["title"])
-print(item["current_bid"])
+    return " ".join(value.split())
 
-# Succfully : Create session → fetch page → call internal API → parse JSON → extract fields
+
+def extract_vehicle(item):
+    """Convert one LSO listing into the database format."""
+    title = clean_html(item.get("title"))
+    description = clean_html(item.get("description"))
+    full_text = f"{title} {description}"
+
+    item_id = item.get("id")
+
+    vin_match = re.search(
+        r"\b[A-HJ-NPR-Z0-9]{17}\b",
+        full_text,
+        re.IGNORECASE,
+    )
+
+    year_match = re.search(
+        r"\b(?:19|20)\d{2}\b",
+        title,
+    )
+
+    mileage_match = re.search(
+        r"(?:MILEAGE|ODOMETER(?: SHOWS)?)"
+        r"\s*:?\s*([\d,]+)",
+        full_text,
+        re.IGNORECASE,
+    )
+
+    # Skip listings missing required identifying information
+    if not item_id or not vin_match or not year_match:
+        return None
+
+    year = int(year_match.group(0))
+
+    # Keep only the year, make and model portion of the title
+    vehicle_title = re.split(
+        r"\bVIN\s*#?",
+        title,
+        maxsplit=1,
+        flags=re.IGNORECASE,
+    )[0]
+
+    vehicle_title = vehicle_title.split(" - ")[0].strip()
+    title_words = vehicle_title.split()
+
+    if len(title_words) < 3:
+        return None
+
+    make = title_words[1].title()
+    model = " ".join(title_words[2:]).title()
+
+    mileage = (
+        int(mileage_match.group(1).replace(",", ""))
+        if mileage_match
+        else None
+    )
+
+    location_city = (
+        clean_html(item.get("mapping_city"))
+        or None
+    )
+
+    location_state = (
+        clean_html(
+            item.get("auction_state")
+            or item.get("seller_state")
+        ).strip()
+        or None
+    )
+
+    return {
+        "source_record_id": f"LSO:{item_id}",
+        "item_id": str(item_id),
+        "external_auction_id": item.get("auction_id"),
+        "vin": vin_match.group(0).upper(),
+        "model_year": year,
+        "make": make,
+        "model": model,
+        "mileage": mileage,
+        "current_bid": float(item.get("current_bid") or 0),
+        "location_city": location_city,
+        "location_state": location_state,
+        "provider_type": "LSO",
+    }
+
+
+def create_lso_session():
+    """Create a session containing the cookies LSO expects."""
+    session = requests.Session()
+
+    session.headers.update({
+        "Accept": "application/json, text/plain, */*",
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/151 Safari/537.36"
+        ),
+        "Origin": "https://www.lso.cc",
+        "Referer": LSO_HOME_URL,
+    })
+
+    response = session.get(
+        LSO_HOME_URL,
+        timeout=20,
+    )
+
+    response.raise_for_status()
+
+    session.cookies.set(
+        "ckchk",
+        "1",
+        domain="www.lso.cc",
+    )
+
+    return session
+
+
+def request_catalog_page(session, page):
+    """Request one catalog page from LSO."""
+    response = session.post(
+        CATALOG_URL,
+        data={
+            "page": page,
+            "perpage": PER_PAGE,
+        },
+        timeout=30,
+    )
+
+    response.raise_for_status()
+
+    page_data = response.json()
+
+    if "items" not in page_data:
+        raise RuntimeError(
+            f"Unexpected response from LSO: {page_data}"
+        )
+
+    return page_data
+
+
+def scan_all_lso_cars():
+    """Scan every LSO catalog page and save its vehicles."""
+    db_helper.check_connection()
+    session = create_lso_session()
+
+    page = 1
+    total_pages = 1
+
+    saved = 0
+    skipped = 0
+    processed_item_ids = set()
+
+    while page <= total_pages:
+        page_data = request_catalog_page(
+            session,
+            page,
+        )
+
+        total_pages = int(
+            page_data.get("total_pages", 1)
+        )
+
+        # Safety against a broken or unexpected API response
+        if total_pages > MAX_PAGES:
+            raise RuntimeError(
+                f"LSO returned {total_pages} pages. "
+                f"The safety limit is {MAX_PAGES}."
+            )
+
+        items = page_data.get("items", [])
+
+        for item in items:
+            item_id = item.get("id")
+
+            # Prevent processing the same listing twice
+            if item_id in processed_item_ids:
+                continue
+
+            processed_item_ids.add(item_id)
+
+            car_data = extract_vehicle(item)
+
+            if car_data is None:
+                skipped += 1
+                continue
+
+            if db_helper.insert_or_update_car(car_data):
+                saved += 1
+
+        print(
+            f"Finished page {page} of {total_pages}: "
+            f"{len(items)} listings checked"
+        )
+
+        page += 1
+
+        if page <= total_pages:
+            time.sleep(REQUEST_DELAY_SECONDS)
+
+    print(
+        f"LSO scan complete: {saved} vehicles saved or updated, "
+        f"{skipped} listings skipped."
+    )
+
+
+if __name__ == "__main__":
+    scan_all_lso_cars()

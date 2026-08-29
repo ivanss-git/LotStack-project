@@ -1,47 +1,86 @@
-import psycopg2
-from psycopg2 import extras
+import os
 
-# Use Render's external connection string directly (Cleanest method for psycopg2)
-# Replace this with the actual External Database URL from your Render Dashboard
-DATABASE_URL = "postgresql://ivanibarra:db_password@://render.com"
+import psycopg2
+
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql:///car_auction?user=ivanibarra",
+)
+
+
+UPSERT_CAR_QUERY = """
+    INSERT INTO auction_listing_schema.auction_listings (
+        source_record_id,
+        source_first_seen_at,
+        source_last_seen_at,
+        item_id,
+        external_auction_id,
+        vin,
+        model_year,
+        make,
+        model,
+        mileage,
+        current_bid,
+        location_city,
+        location_state,
+        provider_type,
+        created_at,
+        updated_at
+    )
+    VALUES (
+        %(source_record_id)s,
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP,
+        %(item_id)s,
+        %(external_auction_id)s,
+        %(vin)s,
+        %(model_year)s,
+        %(make)s,
+        %(model)s,
+        %(mileage)s,
+        %(current_bid)s,
+        %(location_city)s,
+        %(location_state)s,
+        %(provider_type)s,
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP
+    )
+    ON CONFLICT (source_record_id)
+    DO UPDATE SET
+        source_last_seen_at = CURRENT_TIMESTAMP,
+        vin = EXCLUDED.vin,
+        model_year = EXCLUDED.model_year,
+        make = EXCLUDED.make,
+        model = EXCLUDED.model,
+        mileage = EXCLUDED.mileage,
+        current_bid = EXCLUDED.current_bid,
+        location_city = EXCLUDED.location_city,
+        location_state = EXCLUDED.location_state,
+        updated_at = CURRENT_TIMESTAMP;
+"""
+
+
+def check_connection():
+    with psycopg2.connect(DATABASE_URL) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT current_database();")
+            database_name = cursor.fetchone()[0]
+
+    print(f"Connected to PostgreSQL database: {database_name}")
+
 
 def insert_or_update_car(car_data):
-    """
-    Shares this exact saving function with every scraper you write.
-    Targets custom auction_listing_schema explicitly.
-    """
-    conn = None
-    cursor = None
-    
-    # Prefix the table with your active schema where the scraper tables live
-    query = """
-    INSERT INTO auction_listing_schema.auction_cars 
-        (vin, make, model, year, price, mileage, source_site) 
-    VALUES 
-        (%(vin)s, %(make)s, %(model)s, %(year)s, %(price)s, %(mileage)s, %(source_site)s) 
-    ON CONFLICT (vin) 
-    DO UPDATE SET 
-        price = EXCLUDED.price, 
-        mileage = EXCLUDED.mileage, 
-        last_updated = CURRENT_TIMESTAMP;
-    """
-    
     try:
-        # Connect using the optimized connection string URL
-        conn = psycopg2.connect(DATABASE_URL)
-        cursor = conn.cursor()
-        
-        cursor.execute(query, car_data)
-        conn.commit()
-        print(f"Successfully processed VIN: {car_data.get('vin')}")
-        
-    except Exception as e:
-        if conn:
-            conn.rollback()
-        print(f"Database error during scraper execution: {e}")
-        
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+        with psycopg2.connect(DATABASE_URL) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(UPSERT_CAR_QUERY, car_data)
+
+        return True
+
+    except psycopg2.Error as error:
+        print(
+            f"Could not save {car_data.get('source_record_id')}: "
+            f"{error}"
+        )
+        raise
