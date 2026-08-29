@@ -16,7 +16,7 @@ MAX_PAGES = 100
 
 
 def clean_html(value):
-    """Remove HTML tags and decode HTML characters."""
+    """Remove HTML tags and decode HTML entities."""
     value = html.unescape(value or "")
 
     value = re.sub(
@@ -32,12 +32,12 @@ def clean_html(value):
 
 
 def extract_vehicle(item):
-    """Convert one LSO listing into the database format."""
+    """Convert one LSO item into the database format."""
+    item_id = item.get("id")
+
     title = clean_html(item.get("title"))
     description = clean_html(item.get("description"))
     full_text = f"{title} {description}"
-
-    item_id = item.get("id")
 
     vin_match = re.search(
         r"\b[A-HJ-NPR-Z0-9]{17}\b",
@@ -57,13 +57,13 @@ def extract_vehicle(item):
         re.IGNORECASE,
     )
 
-    # Skip listings missing required identifying information
+    # The database requires an ID, year, make and model.
     if not item_id or not vin_match or not year_match:
         return None
 
     year = int(year_match.group(0))
 
-    # Keep only the year, make and model portion of the title
+    # Remove the VIN and extra labels such as "- Key".
     vehicle_title = re.split(
         r"\bVIN\s*#?",
         title,
@@ -91,24 +91,25 @@ def extract_vehicle(item):
         or None
     )
 
-    location_state = (
-        clean_html(
-            item.get("auction_state")
-            or item.get("seller_state")
-        ).strip()
-        or None
-    )
+    location_state = clean_html(
+        item.get("auction_state")
+        or item.get("seller_state")
+    ).strip() or None
 
     return {
         "source_record_id": f"LSO:{item_id}",
         "item_id": str(item_id),
-        "external_auction_id": item.get("auction_id"),
+        "external_auction_id": str(
+            item.get("auction_id") or ""
+        ),
         "vin": vin_match.group(0).upper(),
         "model_year": year,
         "make": make,
         "model": model,
         "mileage": mileage,
-        "current_bid": float(item.get("current_bid") or 0),
+        "current_bid": float(
+            item.get("current_bid") or 0
+        ),
         "location_city": location_city,
         "location_state": location_state,
         "provider_type": "LSO",
@@ -116,7 +117,7 @@ def extract_vehicle(item):
 
 
 def create_lso_session():
-    """Create a session containing the cookies LSO expects."""
+    """Create a browser-like session for LSO."""
     session = requests.Session()
 
     session.headers.update({
@@ -146,7 +147,7 @@ def create_lso_session():
 
 
 def request_catalog_page(session, page):
-    """Request one catalog page from LSO."""
+    """Download one page of the LSO catalog."""
     response = session.post(
         CATALOG_URL,
         data={
@@ -157,19 +158,18 @@ def request_catalog_page(session, page):
     )
 
     response.raise_for_status()
-
     page_data = response.json()
 
     if "items" not in page_data:
         raise RuntimeError(
-            f"Unexpected response from LSO: {page_data}"
+            f"Unexpected LSO response: {page_data}"
         )
 
     return page_data
 
 
 def scan_all_lso_cars():
-    """Scan every LSO catalog page and save its vehicles."""
+    """Scan all LSO pages and save every valid vehicle."""
     db_helper.check_connection()
     session = create_lso_session()
 
@@ -190,11 +190,10 @@ def scan_all_lso_cars():
             page_data.get("total_pages", 1)
         )
 
-        # Safety against a broken or unexpected API response
         if total_pages > MAX_PAGES:
             raise RuntimeError(
                 f"LSO returned {total_pages} pages. "
-                f"The safety limit is {MAX_PAGES}."
+                f"Safety limit: {MAX_PAGES}."
             )
 
         items = page_data.get("items", [])
@@ -202,7 +201,6 @@ def scan_all_lso_cars():
         for item in items:
             item_id = item.get("id")
 
-            # Prevent processing the same listing twice
             if item_id in processed_item_ids:
                 continue
 
