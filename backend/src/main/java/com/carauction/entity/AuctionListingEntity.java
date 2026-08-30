@@ -2,6 +2,7 @@ package com.carauction.entity;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "auction_listings", schema = "auction_listing_schema")
@@ -49,6 +50,10 @@ public class AuctionListingEntity extends BaseEntity {
     @Column(name = "location_longitude") private Double locationLongitude;
     @Column(name = "provider_type", length = 30) private String providerType;
     @Column(name = "country_of_origin", length = 100) private String countryOfOrigin;
+    @Column(length = 17)
+        private String vin;
+    @Column(name = "current_bid", precision = 12, scale = 2)
+    private BigDecimal currentBid;
 
     protected AuctionListingEntity() {}
 
@@ -110,6 +115,11 @@ public class AuctionListingEntity extends BaseEntity {
         this.countryOfOrigin = countryOfOrigin;
     }
 
+    public String getItemId() { return itemId;}
+    public String getExternalAuctionId() { return externalAuctionId;}
+    public String getVin() { return vin;}
+    public BigDecimal getCurrentBid() { return currentBid;}
+    public String getProviderType() { return providerType;}
     public String getSourceRecordId() { return sourceRecordId; }
     public String getStockNumber() { return stockNumber; }
     public Short getModelYear() { return modelYear; }
