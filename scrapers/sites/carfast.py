@@ -1,18 +1,9 @@
-<<<<<<< HEAD
 """
 CarFast integration.
 
 Status:
     Blocked because CarFast's structured site endpoints return a
     Cloudflare verification response to direct Python requests.
-=======
-
-"""CarFast structured-endpoint collector."""
-
-from __future__ import annotations
-
-from typing import Any
->>>>>>> db1701d (feat(scrapers): add initial CarFast integration)
 
 Next steps:
     - Request authorized API access from CarFast.
