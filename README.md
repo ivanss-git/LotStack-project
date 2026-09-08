@@ -10,10 +10,11 @@ The project is based on real vehicle-auction purchasing experience and combines 
 
 The dashboard displays real vehicle purchase and resale outcomes tracked through LotStack:
 
-- **$92,119** in total sales
-- **$32,694** in net profit
+- **$94,800** in total vehicle sales
+- **$62,106** invested in sold vehicles
+- **$32,694** in realized net profit
 - **64.0%** average ROI
-- Individual vehicle costs, repairs, sales, and returns
+- **$92,119** invested across the complete portfolio
 
 > The hosted application may take a moment to load after a period of inactivity.
 
