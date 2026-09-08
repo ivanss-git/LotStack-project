@@ -16,8 +16,6 @@ The dashboard displays real vehicle purchase and resale outcomes tracked through
 - **64.0%** average ROI
 - **$92,119** invested across the complete portfolio
 
-> The hosted application may take a moment to load after a period of inactivity.
-
 ## Current Features
 
 - Displays real vehicle purchases and resale results
