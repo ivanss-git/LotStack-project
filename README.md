@@ -50,6 +50,16 @@ The scraping pipeline gathers vehicle listings and converts inconsistent auction
 
 The backend then evaluates each listing using available information such as price, estimated repair cost, resale potential, title condition, and overall risk. The results are returned through the API and displayed through the dashboard or browser extension.
 
+## Architecture
+
+LotStack follows an end-to-end pipeline from auction data collection and normalization through PostgreSQL persistence, Spring Boot analysis and ranking, and React/Chrome extension interfaces.
+
+![LotStack System Architecture](docs/diagram.png)
+
+### System Flow
+
+`Auction Sources → Scraping & Ingestion → Normalization → PostgreSQL → Spring Boot REST API → Analysis & Ranking → React Dashboard / Chrome Extension`
+
 ## Technology Stack
 
 | Area | Technologies |
