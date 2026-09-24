@@ -1,6 +1,6 @@
 # ebay_ingest.py
 
-from scrapers.sites.ebay_sb_auth import get_access_token
+from ingestion.sources.ebay.auth import get_access_token
 import requests
 
 
