@@ -1,11 +1,8 @@
 import os
 import requests
+from dotenv import load_dotenv
 
-# add these to double check 
-# python wasnt getting credentials from the environment
-# fix was to ecport them again
-print("CLIENT ID:" , os.getenv("EBAY_CLIENT_ID"))
-print("EBAY_CLIENT_SECRET", os.getenv("EBAY_CLIENT_SECRET"))
+load_dotenv()
 
 def get_access_token():
     response = requests.post(

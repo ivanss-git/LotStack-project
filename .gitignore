@@ -35,8 +35,15 @@ kaggle.json
 .DS_Store
 **/.DS_Store
 
-venv/
-.venv/
+#secrets
+
+.env
 
 *.pem
 *-key.pem
+
+# python
+venv/
+.venv/
+__pycache__/
+*.pyc
