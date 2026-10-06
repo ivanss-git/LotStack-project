@@ -6,7 +6,6 @@ DATABASE_URL = os.getenv(
     "postgresql:///car_auction?user=ivanibarra",
 )
 
-
 UPSERT_CAR_QUERY = """
     INSERT INTO auction_listing_schema.auction_listings (
         source_record_id,
@@ -44,17 +43,10 @@ UPSERT_CAR_QUERY = """
         CURRENT_TIMESTAMP,
         CURRENT_TIMESTAMP
     )
-    ON CONFLICT (source_record_id)
-    DO UPDATE SET
+    ON CONFLICT (source_record_id) DO UPDATE SET
         source_last_seen_at = CURRENT_TIMESTAMP,
-        item_id = EXCLUDED.item_id,
-        external_auction_id = EXCLUDED.external_auction_id,
-        vin = EXCLUDED.vin,
-        model_year = EXCLUDED.model_year,
-        make = EXCLUDED.make,
-        model = EXCLUDED.model,
-        mileage = EXCLUDED.mileage,
         current_bid = EXCLUDED.current_bid,
+        mileage = EXCLUDED.mileage,
         location_city = EXCLUDED.location_city,
         location_state = EXCLUDED.location_state,
         provider_type = EXCLUDED.provider_type,
@@ -62,28 +54,32 @@ UPSERT_CAR_QUERY = """
 """
 
 
+def get_connection():
+    """Return a new connection to PostgreSQL."""
+    return psycopg2.connect(DATABASE_URL)
+
+
 def check_connection():
     """Confirm that the scraper can connect to PostgreSQL."""
-    with psycopg2.connect(DATABASE_URL) as connection:
+    with get_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute("SELECT current_database();")
             database_name = cursor.fetchone()[0]
 
     print(f"Connected to PostgreSQL database: {database_name}")
+    return True
 
 
 def insert_or_update_car(car_data):
     """Insert a listing or update it when it already exists."""
     try:
-        with psycopg2.connect(DATABASE_URL) as connection:
+        with get_connection() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(UPSERT_CAR_QUERY, car_data)
-
         return True
 
     except psycopg2.Error as error:
         print(
-            f"Could not save "
-            f"{car_data.get('source_record_id')}: {error}"
+            f"Could not save {car_data.get('source_record_id')}: {error}"
         )
-        raise
+        return False
