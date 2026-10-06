@@ -1,4 +1,4 @@
-from db_helper import insert_or_update_car
+from app.db.session import insert_or_update_car
 
 # BeautifulSoup code to scrape the page 
 # Conists of 3 main parts: 

@@ -4,7 +4,7 @@ import time
 
 import requests
 
-from scrapers import db_helper
+from app.db import session as db_helper
 
 
 CATALOG_URL = "https://www.lso.cc/api/getitems"
