@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useState,
   type ReactNode,
   type SyntheticEvent,
@@ -7,7 +8,7 @@ import './App.css';
 
 /* ---------- Types ---------- */
 
-type Page = 'dashboard' | 'about';
+type Page = 'dashboard' | 'opportunities' | 'about';
 type VehicleStatus = 'Sold' | 'Under Repair' | 'Available' | 'Presold';
 type StatusFilter = 'all' | VehicleStatus;
 type SortOption = 'newest' | 'highest-roi' | 'highest-profit';
@@ -49,6 +50,39 @@ interface Vehicle {
   notes?: string;
 }
 
+interface AuctionOpportunity {
+  listingId: number;
+  sourceRecordId: string;
+  provider: string;
+  vin: string | null;
+  year: number | null;
+  make: string | null;
+  model: string | null;
+  mileage: number | null;
+  estimatedPurchasePrice: number | null;
+  estimatedMarketValue: number | null;
+  estimatedRepairCost: number | null;
+  transportCost: number | null;
+  auctionFees: number | null;
+  totalCost: number | null;
+  expectedProfit: number | null;
+  roiPercent: number | null;
+  recommendedMaxBid: number | null;
+  opportunityScore: number | null;
+  riskLevel: string | null;
+  goodCandidate: boolean | null;
+  location: string | null;
+}
+
+interface RankingsResponse {
+  generatedAt: string;
+  rankedBy: string;
+  sitesCompared: number;
+  vehiclesCompared: number;
+  globalTop10: AuctionOpportunity[];
+  siteTop10: Record<string, AuctionOpportunity[]>;
+}
+
 interface MetricCardProps {
   title: string;
   value: string;
@@ -57,7 +91,7 @@ interface MetricCardProps {
 
 /* ---------- Fixed display values ---------- */
 
-const PAGES: Page[] = ['dashboard', 'about'];
+const PAGES: Page[] = ['dashboard', 'opportunities', 'about'];
 
 const STATUS_STYLES: Record<
   VehicleStatus,
@@ -682,12 +716,95 @@ function About() {
   );
 }
 
+function AuctionOpportunities({
+  rankings,
+  error,
+  loading,
+}: Readonly<{
+  rankings: RankingsResponse | null;
+  error: string | null;
+  loading: boolean;
+}>) {
+  if (loading) return <section className="details-card"><p>Loading auction rankings...</p></section>;
+  if (error) return <section className="details-card"><h2>Unable to load rankings</h2><p>{error}</p><p>Check that Spring Boot is running on port 8080.</p></section>;
+  if (!rankings) return <section className="details-card"><p>No rankings available.</p></section>;
+
+  const money = (value: number | null) => value === null ? 'N/A' : formatCurrency(value);
+
+  return (
+    <section className="table-card">
+      <div className="table-toolbar">
+        <div>
+          <h2>Auction Opportunities</h2>
+          <p>{rankings.vehiclesCompared.toLocaleString()} listings compared across {rankings.sitesCompared} sources</p>
+          <p>Projected values are model estimates, not realized profits or guaranteed returns.</p>
+        </div>
+      </div>
+      <div className="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle</th>
+              <th>Source</th>
+              <th>Est. Purchase</th>
+              <th>Est. Total Cost</th>
+              <th>Est. Profit</th>
+              <th>Est. ROI</th>
+              <th>Score</th>
+              <th>Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rankings.globalTop10.map((item) => (
+              <tr key={item.listingId}>
+                <td><strong>{[item.year, item.make, item.model].filter(Boolean).join(' ') || 'Unknown vehicle'}</strong></td>
+                <td>{item.provider}</td>
+                <td>{money(item.estimatedPurchasePrice)}</td>
+                <td>{money(item.totalCost)}</td>
+                <td className={getValueClass(item.expectedProfit)}>{money(item.expectedProfit)}</td>
+                <td>{item.roiPercent === null ? 'N/A' : `${item.roiPercent.toFixed(1)}%`}</td>
+                <td>{item.opportunityScore ?? 'N/A'}</td>
+                <td>{item.riskLevel ?? 'Unknown'}</td>
+              </tr>
+            ))}
+            {rankings.globalTop10.length === 0 && <tr><td colSpan={8}>No ranked listings found.</td></tr>}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- Main application ---------- */
 
 function App() {
   const [activePage, setActivePage] = useState<Page>('dashboard');
   const [selectedVehicle, setSelectedVehicle] =
     useState<Vehicle | null>(null);
+  const [rankings, setRankings] = useState<RankingsResponse | null>(null);
+  const [rankingsError, setRankingsError] = useState<string | null>(null);
+  const [rankingsLoading, setRankingsLoading] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    async function loadRankings() {
+      try {
+        const response = await fetch('/api/demo/rankings', { signal: controller.signal });
+        if (!response.ok) throw new Error(`Rankings API returned HTTP ${response.status}`);
+        const data: RankingsResponse = await response.json();
+        if (!Array.isArray(data.globalTop10)) throw new Error('Unexpected rankings response');
+        setRankings(data);
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        setRankingsError(error instanceof Error ? error.message : 'Unable to load rankings');
+      } finally {
+        if (!controller.signal.aborted) setRankingsLoading(false);
+      }
+    }
+    void loadRankings();
+    return () => controller.abort();
+  }, []);
+
 
   const soldVehicles = vehicles.filter(
     (vehicle) => vehicle.status === 'Sold' && vehicle.soldPrice !== null
@@ -743,7 +860,10 @@ function App() {
   let pageTitle = 'Vehicle Portfolio';
   let pageContent: ReactNode;
 
-  if (activePage === 'about') {
+  if (activePage === 'opportunities') {
+    pageTitle = 'Auction Opportunities';
+    pageContent = <AuctionOpportunities rankings={rankings} error={rankingsError} loading={rankingsLoading} />;
+  } else if (activePage === 'about') {
     pageTitle = 'About LotStack';
     pageContent = <About />;
   } else if (selectedVehicle) {
