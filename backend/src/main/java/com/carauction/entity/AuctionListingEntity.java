@@ -23,7 +23,6 @@ public class AuctionListingEntity extends BaseEntity {
     @Column(name = "body_style", length = 100) private String bodyStyle;
     @Column(name = "exterior_color", length = 50) private String exteriorColor;
     @Column(length = 255) private String engine;
-    private Short cylinders;
     @Column(length = 50) private String transmission;
     @Column(length = 30) private String drivetrain;
     @Column(name = "fuel_type", length = 50) private String fuelType;
@@ -86,7 +85,6 @@ public class AuctionListingEntity extends BaseEntity {
         this.bodyStyle = bodyStyle;
         this.exteriorColor = exteriorColor;
         this.engine = engine;
-        this.cylinders = cylinders;
         this.transmission = transmission;
         this.drivetrain = drivetrain;
         this.fuelType = fuelType;
