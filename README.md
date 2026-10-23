@@ -166,7 +166,7 @@ For a clean environment and fresh bootstrap:
 npm run dev:clean
 ```
 
-### Local Services
+### Local Development URLs
 
 | Service | URL |
 | :--- | :--- |
