@@ -185,7 +185,7 @@ const vehicles: Vehicle[] = [
     id: 5, year: 2009, make: 'Honda', model: 'Civic', trim: 'GX',
     vin: '1HGFA46559L001210', mileage: null,
     thumbnailUrl: '/images/sedans/2009-civic-gx.jpeg', imageUrls: ['/images/sedans/2009-civic-gx.jpeg'],
-    purchasePrice: 3700, soldPrice: null, status: 'Available',
+    purchasePrice: 3700, soldPrice: 6400, status: 'Sold',
     expenses: [
       { id: 501, description: 'Battery', category: 'REPAIR', amount: 160 },
       { id: 502, description: 'Hubcaps', category: 'REPAIR', amount: 60 },
