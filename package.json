@@ -1,5 +1,9 @@
 {
-  "dependencies": {
-    "pip": "^0.0.1"
+  "name": "car-analyzer-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:all": "docker compose up --build",
+    "dev:clean": "docker compose down -v && docker compose up --build"
   }
 }

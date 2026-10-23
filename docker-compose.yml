@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # 1. Database
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: car_auction_db
+    environment:
+      POSTGRES_USER: car_user
+      POSTGRES_PASSWORD: car_password
+      POSTGRES_DB: car_auction_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Spring Boot Backend
+  backend-api:
+    build: ./backend
+    container_name: car_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/car_auction_db
+      - SPRING_DATASOURCE_USERNAME=car_user
+      - SPRING_DATASOURCE_PASSWORD=car_password
+      - SPRING_FLYWAY_BASELINE_ON_MIGRATE=true
+    depends_on:
+      - postgres-db
+
+  # 3. React Frontend
+  frontend-app:
+    build: ./frontend
+    container_name: car_frontend
+    ports:
+      - "3000:80"  
+    depends_on:
+      - backend-api
+
+volumes:
+  postgres_data:
