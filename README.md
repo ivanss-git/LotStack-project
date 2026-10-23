@@ -1,153 +1,56 @@
 # LotStack
 
-LotStack is a full-stack vehicle auction analysis platform that collects and normalizes auction listings, evaluates potential purchases, and ranks vehicles using estimated value, repair cost, title risk, resale potential, and expected ROI.
-
-The project is based on real vehicle-auction purchasing experience and combines a Spring Boot API, PostgreSQL database, Python data pipeline, React dashboard, and Chrome extension. A machine-learning ranking model is currently in development.
+LotStack is a full-stack vehicle auction analysis platform combining a Spring Boot API, PostgreSQL database, Python data pipeline, React dashboard, and Chrome extension to collect, normalize, evaluate, and rank vehicle auction listings [1.17]. A machine-learning ranking model is currently in development [1.17].
 
 ## Live Demo and Results
 
-**[View the Live LotStack Dashboard](https://lotstack.onrender.com)**
+**[View the Live LotStack Dashboard](https://onrender.com)**
 
-The dashboard displays real vehicle purchase and resale outcomes tracked through LotStack:
-
-- **$94,800** in total vehicle sales
-- **$62,106** invested in sold vehicles
-- **$32,694** in realized net profit
-- **64.0%** average ROI
-- **$92,119** invested across the complete portfolio
+Portfolio outcomes tracked via LotStack:
+- **\$101,200** in total vehicle sales [1.17]
+- **\$66,326** invested across the portfolio [1.17]
+- **\$34,874** realized net profit [1.17]
+- **62.6%** average ROI [1.17]
 
 ## Current Features
 
-- Displays real vehicle purchases and resale results
-- Tracks purchase prices, fees, repair expenses, and selling prices
-- Calculates profit and ROI for each vehicle
-- Collects auction listings through site-specific Python scrapers
-- Processes all available listing pages from supported auction sources
-- Normalizes VIN, price, mileage, damage, title, location, and estimated value
-- Stores vehicle listings and analysis results in PostgreSQL
-- Applies transparent, rule-based scoring to rank auction opportunities
-- Exposes vehicle information and recommendations through REST API endpoints
-- Displays ranked recommendations and risk scores through a Chrome extension
-- Manages database changes through Flyway migrations
+- Tracks real vehicle purchases, pricing, repairs, profit, and ROI [1.17]
+- Scrapes and normalizes auction listings via Python and Beautiful Soup [1.17]
+- Persists data in PostgreSQL and manages migrations via Flyway [1.17]
+- Provides rule-based auction scoring via REST endpoints, React dashboard, and a Chrome extension [1.17]
+- Features automated CSV ingestion and statistical re-computation on boot [1.17]
 
-## How It Works
+## Architecture & Technology Stack
 
 ```text
-Auction Sources
-       ↓
-Python Scrapers
-       ↓
-Data Cleaning and Normalization
-       ↓
-PostgreSQL Database
-       ↓
-Spring Boot Analysis and Ranking API
-       ↓
-Web Dashboard and Browser Extension
+Auction Sources → Python Scrapers → Normalization → PostgreSQL → Spring Boot REST API → Analysis & Ranking → React Dashboard / Chrome Extension
 ```
-
-The scraping pipeline gathers vehicle listings and converts inconsistent auction information into a standardized format.
-
-The backend then evaluates each listing using available information such as price, estimated repair cost, resale potential, title condition, and overall risk. The results are returned through the API and displayed through the dashboard or browser extension.
-
-## Architecture
-
-LotStack follows an end-to-end pipeline from auction data collection and normalization through PostgreSQL persistence, Spring Boot analysis and ranking, and React/Chrome extension interfaces.
-
-![LotStack System Architecture](docs/diagram.png)
-
-### System Flow
-
-`Auction Sources → Scraping & Ingestion → Normalization → PostgreSQL → Spring Boot REST API → Analysis & Ranking → React Dashboard / Chrome Extension`
-
-## Technology Stack
 
 | Area | Technologies |
-|---|---|
-| Backend | Java 21, Spring Boot, Spring Data JPA, Maven |
-| Database | PostgreSQL, Flyway |
-| Scraping and ingestion | Python, Requests, Beautiful Soup |
-| Web dashboard | React, TypeScript, Vite |
-| Browser extension | React, TypeScript, Vite, Chrome Manifest V3 |
-| Machine learning | Python, Jupyter, pandas, scikit-learn |
-| Development | Docker Compose, Git, GitHub |
+| :--- | :--- |
+| **Backend** | Java 21, Spring Boot, Spring Data JPA, Maven [1.17] |
+| **Database** | PostgreSQL, Flyway [1.17] |
+| **Scraping/Ingestion** | Python, Requests, Beautiful Soup [1.17] |
+| **Web/Extension** | React, TypeScript, Vite, Chrome Manifest V3 [1.17] |
+| **Machine Learning** | Python, Jupyter, pandas, scikit-learn [1.17] |
+| **DevOps** | Docker Compose, Git, GitHub [1.17] |
 
-## Ranking System
+## Ranking & Machine Learning
 
-The current ranking system uses explicit rules and weighted metrics to evaluate each auction listing.
+The rule-based system ranks listings using auction prices, estimated values, repair expenses, title risk, mileage, and expected ROI [1.17]. Concurrently, an ML model is under development to predict resale values, compare recommendations against baseline rules, and offer explainable outputs [1.17].
 
-Depending on the available data, the system considers:
+## Project Structure & Developer Setup
 
-- Current auction price
-- Estimated market value
-- Expected repair expenses
-- Resale potential
-- Title condition
-- Vehicle damage
-- Mileage
-- Location and transportation costs
-- Expected profit and ROI
-- Overall purchase risk
+Directories include `backend/`, `data/`, `docs/`, `extension/`, `frontend/`, `ingestion/`, `ml/`, `scrapers/`, and `scripts/` [1.17]. 
 
-The rule-based system provides a transparent working baseline that can later be compared against the machine-learning model.
-
-## Machine Learning Development
-
-A machine-learning model is currently being developed to predict vehicle resale value and improve purchase recommendations using historical auction, vehicle, and sales data.
-
-Planned development includes:
-
-- Training and comparing multiple prediction models
-- Predicting resale value and potential profit
-- Comparing model recommendations with the current rule-based rankings
-- Evaluating predictions against actual vehicle resale outcomes
-- Measuring prediction error, realized profit, and ROI
-- Adding explainable recommendations that show why a vehicle received its ranking
-
-The README and live application will be updated once the model has been fully trained, evaluated, and integrated.
-
-## Project Structure
-
-```text
-backend/      Spring Boot API, services, entities, repositories, and migrations
-data/         Sample datasets and project data
-docs/         Architecture, API, database, testing, and roadmap documentation
-extension/    Chrome extension for auction recommendations
-frontend/     React dashboard for vehicle purchases and outcomes
-ingestion/    Vehicle import and data-processing pipeline
-ml/           Analytics notebooks and machine-learning development
-scrapers/     Auction scrapers, database helpers, and normalization
-scripts/      Ranking and workflow utilities
-```
-
-## Roadmap
-
-- Complete and evaluate the machine-learning model
-- Integrate model predictions into the backend
-- Compare predicted results with actual auction and resale outcomes
-- Expand supported auction-site integrations
-- Improve automated scanning and scheduling
-- Add notifications for high-ranking vehicles
-- Track historical model performance
-- Improve recommendation explanations
-
-## Developer Setup
-
-Detailed installation and local development instructions are available in the [`docs`](docs/) directory.
-
-To clone the repository:
-
+Ensure [Docker Desktop](https://docker.com) is running, then use these zero-touch commands:
 ```bash
 git clone https://github.com/ivanss-git/LotStack-project.git
 cd LotStack-project
+npm run dev:all     # Launch full environment
+npm run dev:clean   # Hard reset and fresh bootstrap
 ```
+API runs at `http://localhost:8080` and Dashboard at `http://localhost:3000` [1.17].
 
-## Project Status
-
-LotStack is under active development.
-
-The dashboard, database integration, rule-based ranking system, REST API, scraping pipeline, and browser-extension interface have been implemented. The machine-learning model and additional auction-site integrations are currently in progress.
-
-## Disclaimer
-
-LotStack is an educational and personal decision-support project. Vehicle estimates and rankings are not financial guarantees and should be independently verified before making a purchase.
+## Status & Disclaimer
+LotStack is under active development [1.17]. It serves as an educational decision-support tool; estimates are not financial guarantees [1.17].
